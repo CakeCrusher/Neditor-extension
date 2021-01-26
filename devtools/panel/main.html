@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="main.css">
+    </head>
+    <body>
+        <div style="display: none;" id="warning">
+            <h1>To edit you must activate Neditor</h1>
+        </div>
+        <div id="content">
+            <div id="current_state_info" >
+
+            </div>
+            <div>
+                <h2 style="font-weight: bold; margin-bottom: 5px;">Current nedit:</h2>
+                <div style="margin-bottom: 5px;" class="side_by_side">
+                    <h2 id="current_edit" style="margin: 0;margin-right: 5px; font-weight: lighter;"><i>None</i></h2>
+                    <div><button id="clear_nedit_button" style="display: none; padding: 2px 10px;" class="danger-button button-s">clear</button></div>
+                </div>
+            </div>
+            <div class="side_by_side" style="opacity: 0.7">
+                <div style="font-size: 16px; margin-right: 10px; align-self: center;">Save nedit as:</div>
+                <input placeholder="name this nedit" style="font-size: 14px; margin-right: 10px;" class="general-content"  id="edit_name" />
+                <button class="primary-button" id="save" disabled style="opacity: 0.7">save</button>
+            </div>
+            <!-- <div style="opacity: 0.7; margin-top: 10px">
+                <button class="primary-button" id="show_saved_edits">show saved edits</button>
+                <ul id="saved_edits_container" style="display: none">
+                    
+                </ul>
+            </div> -->
+            <div class="side_by_side">
+                <label for="storage_checkbox"><h2 class="segment_title" style="margin-right: 5px;" id="storage_text">Clear site data</h2></label>
+                <input type="checkbox" id="storage_checkbox" />
+            </div>
+            <h2 class="segment_title">Filter</h2>
+            <div class="side_by_side" id="description_container" style="margin-bottom: 10px;">
+                <label for="program_description"><div style="font-size: 16px; margin-right: 10px; align-self: center;">Block any url with the text: </div></label>
+                <input style="font-size: 14px; margin-right: 10px;" class="general-content" id="program_description">
+                <button class="primary-button" id="submit_program" >add block text</button>
+            </div>
+            <table id="programs_table" cellspacing="0" cellpadding="5" style="margin-bottom: 20px;">
+                <tr>
+                    <th style="border-left-width: 0;"><button id="programs-block_button" class="toblock">integrate</button></th>
+                    <th style="border-right-width: 0;">text</th>
+                </tr>
+                <tbody id="programs-table_data">
+
+                </tbody>
+            </table>
+            <h2 class="segment_title">Requests</h2>
+            <div id="table_options-container" >
+                <div style="margin-bottom: 10px;" class="side_by_side">
+                    <button class="primary-button table_option" color="black" value="all" style="margin-right: 10px;"><h2 style="margin: 0;">All (<span id="request_count">0</span>)</h2></button>
+                    <button class="danger-button table_option" color=" rgb(140, 35, 35)" value="blocked"><h2 style="margin: 0;">Blocked (<span id="blocked_request_count">0</span>)</h2></button>
+                </div>
+                <div id="all-content">
+                    <!-- <div id="add_column-container" class="side_by_side">
+                        <label for="column_data"><div style="color: white;font-size: 16px; margin-right: 10px; align-self: center;">add column: </div></label>
+                        <select class="add_column-text" id="column_data">
+                            <option value="type">type</option>
+                            <option value="other">other</option>
+                        </select>
+                        <button class="primary-button" id="add_column">add</button>
+                    </div> -->
+                    <div class="table_container side_by_side" style="padding-right: 0;">
+                        <table id="network_table" style="border-bottom-right-radius: 0; border-top-right-radius: 0;" cellspacing="0" cellpadding="5">
+                            <tr id="table_head">
+                                <th style="border-left-width: 0;"><button id="network-block_button" class="toblock">block</button></th>
+                                <th><img class="search_icon" src="../../icons/search.svg" /><input id="url-input" class="head_inputs" placeholder="url" style="width: 47px"/></th>
+                            </tr>
+                            <tbody id="table_data">
+
+                            </tbody>
+                        </table>
+                        <select style="font-size: 16px;" id="column_data">
+                            <option value="" style="opacity: 0.5;" disabled selected hidden>add</option>
+                            <option value="type">type</option>
+                            <option value="priority">priority</option>
+                            <option value="time">time</option>
+                            <option value="headers(amount)">headers(amount)</option>
+                            <option value="size">size</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="blocked-content" style="display: none;" >
+                    <!-- <h2 style="color:  rgb(170, 65, 65)">Blocked requests (<span id="blocked_request_count">0</span>)</h2> -->
+                    <table id="blocked_table" cellspacing="0" cellpadding="5">
+                        <tr>
+                            <!-- <th><button id="blocked-block_button" class="toblock">block</button></th> -->
+                            <th style="border-left-width: 0;">blocked by</th>
+                            <th><img class="search_icon" src="../../icons/search.svg" /><input id="blocked_url-input" class="head_inputs" placeholder="url " style="width: 47px"/></th>
+                        </tr>
+                        <tbody id="blocked_table_data"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script src="init.js"></script>
+        <script src="handleTables.js"></script>
+        <script src="handleRequests.js"></script>
+        <script src="main.js"></script>
+    </body>
+</html>

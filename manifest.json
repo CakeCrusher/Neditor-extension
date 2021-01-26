@@ -1,0 +1,42 @@
+{
+    "manifest_version": 2,
+    "name": "Neditor (cleaned)",
+    "description": "Network enhancer and tool augmented by the community to provide a better browsing experience.",
+    "version": "1.0.0",
+    "icons": {
+        "16": "icons/icon16.png",
+        "24": "icons/icon24.png",
+        "32": "icons/icon32.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    },
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "neditor@1sebastian1sosa1.com",
+            "strict_min_version": "53.0"
+        }
+    },
+    "browser_action": {
+        "default_icon": "icons/icon16.png",
+        "default_popup": "popup/popup.html",
+        "default_title": "Neditor"
+    },
+    "background": {
+        "scripts": [
+            "utils.js",
+            "background/onBeforeRequest.js",
+            "background/onUpdated.js",
+            "background/main.js"
+        ],
+        "persistent": true
+    },
+    "devtools_page": "devtools/devtools.html",
+    "permissions": [
+        "tabs",
+        "storage",
+        "webRequest",
+        "webRequestBlocking",
+        "browsingData",
+        "<all_urls>"
+    ]
+}
