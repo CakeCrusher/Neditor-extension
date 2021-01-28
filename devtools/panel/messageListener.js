@@ -9,12 +9,15 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         if (msg.thisTabUrl) {
             thisTabUrl = msg.thisTabUrl
             nedit = msg.nedit
+            filtersToShow = msg.nedit.filters
+            makeFilterTable()
+            initiateStorageState()
+            activateAfterNedit()
         }
         if (msg.requestUrl) {
             backgroundRequestUrls.push(msg.requestUrl)
         }
         if (msg.newNedit) {
-            console.log('nedit updated thanks to newNedit');
             nedit = msg.newNedit
         }
     }

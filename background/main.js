@@ -1,5 +1,4 @@
 const initializeStorage = (name, initialState, setVar) => {
-    console.log(name, typeof name);
     chrome.storage.sync.get([name], (result) => {
         if (result[name]) {
             setVar(result[name])

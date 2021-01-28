@@ -41,11 +41,11 @@
             <div class="side_by_side" id="description_container" style="margin-bottom: 10px;">
                 <label for="program_description"><div style="font-size: 16px; margin-right: 10px; align-self: center;">Block any url with the text: </div></label>
                 <input style="font-size: 14px; margin-right: 10px;" class="general-content" id="program_description">
-                <button class="primary-button" id="submit_program" >add block text</button>
+                <button style="cursor: auto; opacity: 0.5;" class="primary-button" id="submit_program" disabled="true" >add block text</button>
             </div>
             <table id="programs_table" cellspacing="0" cellpadding="5" style="margin-bottom: 20px;">
                 <tr>
-                    <th style="border-left-width: 0;"><button id="programs-block_button" class="toblock">integrate</button></th>
+                    <th style="border-left-width: 0;"><button id="programs-block_button" block="true" class="toblock">integrate</button></th>
                     <th style="border-right-width: 0;">text</th>
                 </tr>
                 <tbody id="programs-table_data">
@@ -102,6 +102,7 @@
         <script src="../../utils.js"></script>
         <script src="init.js"></script>
         <script src="handleTables.js"></script>
+        <script src="buttonsHandler.js"></script>
         <script src="messageListener.js"></script>
         <script src="main.js"></script>
     </body>

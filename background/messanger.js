@@ -5,6 +5,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 })
 
 chrome.storage.onChanged.addListener((changes, namespace) => {
+    console.log(changes);
     if (Object.keys(changes).includes('activated')) {
         neditorActive = changes.activated.newValue
     } else if (Object.keys(changes).includes('savedNedits')) {
@@ -14,10 +15,9 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
     } else if (Object.keys(changes).includes('automaticNedit')) {
 
     } else if (Object.keys(changes).includes('darkMode')) {
-        
+
     } else {
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-            console.log(tabs[0].url);
             const rootUrl = urlRoot(tabs[0].url)
             chrome.runtime.sendMessage({to: rootUrl, except: tabs[0].id, newNedit: changes[rootUrl].newValue})
         })

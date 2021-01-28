@@ -31,32 +31,54 @@ const requestNavigator = (lookingFor, request) => {
 }
 
 const onBlockCheckboxClick = (checkbox, request) => {
+    const url = requestNavigator('url', request)
     if (checkbox.checked) {
-        addUrlToBlock(thisTabUrl, requestNavigator('url', request))
+        addUrlsToBlock(thisTabUrl, [url])
+        nedit.urls.push(url)
     } else {
-        removeUrlToBlock(thisTabUrl, requestNavigator('url', request))
+        removeUrlsToBlock(thisTabUrl, [url])
+        nedit.urls = nedit.urls.filter(blockedUrl => blockedUrl !== url)
+    }
+}
+const onBlockCheckboxClickTR = (checkbox, filterText) => {
+    if (checkbox.checked) {
+        addFilters(thisTabUrl, [filterText])
+        nedit.filters.push(filterText)
+    } else {
+        removeFilters(thisTabUrl, [filterText])
+        nedit.filters = nedit.filters.filter(blockedUrl => blockedUrl !== filterText)
     }
 }
 
-const makeCellContent = (type, request) => {
+const makeCellContent = (type, request, tableId) => {
     if (type === 'block') {
         const checkbox = document.createElement('input')
+        const uniqueId = tableId === 'ANR' ? requestNavigator('url', request) : request
         checkbox.type = 'checkbox'
         checkbox.className = 'blockCheckbox'
-        checkbox.id = `blockCheckbox-${requestNavigator('url', request)}`
-        checkbox.checked = nedit.urls.includes(requestNavigator('url', request))
-        checkbox.onclick = () => onBlockCheckboxClick(checkbox, request)
+        checkbox.id = `blockCheckbox-${tableId}-${uniqueId}`
+        if (tableId === 'ANR') {
+            checkbox.checked = nedit.urls.includes(uniqueId)
+            checkbox.onclick = () => onBlockCheckboxClick(checkbox, request)
+        } else if (tableId === 'FNR') {
+            checkbox.checked = nedit.filters.includes(uniqueId)
+            checkbox.onclick = () => onBlockCheckboxClickTR(checkbox, request)
+        }
         return checkbox
-    } else if (type === 'url' || type === 'type' || type === 'priority' || type === 'time' || type === 'headers(amount)' || type === 'size') {
+    } else if (type === 'url' || type === 'filter' || type === 'type' || type === 'priority' || type === 'time' || type === 'headers(amount)' || type === 'size') {
         const div = document.createElement('div')
-        div.innerText = requestNavigator(type, request)
+        if (tableId === 'ANR') {
+            div.innerText = requestNavigator(type, request)
+        } else if (tableId === 'FNR') {
+            div.innerText = request
+        }
         return div
     }
 }
 
-const addCell = (type, request, row) => {
+const addCell = (type, request, row, tableId = 'ANR') => {
     const cell = document.createElement('td')
-    cell.appendChild(makeCellContent(type, request))
+    cell.appendChild(makeCellContent(type, request, tableId))
     row.appendChild(cell) 
 }
 
@@ -120,13 +142,52 @@ const addColumn = (columnType = columnAggregator.value) => {
     activateColumn(columnType)
 }
 
+const onBlockToggle = (button) => {
+    const urlsOfRequestsInTable = requestsToShow.map(r => r.request.url)
+    const buttonsOfRequestsInTable = []
+    for (const url of urlsOfRequestsInTable) {
+        const foundElement = document.getElementById(`blockCheckbox-ANR-${url}`)
+        buttonsOfRequestsInTable.push(foundElement)
+    }
+    if (button.getAttribute('block')) {
+        for (const blockButton of buttonsOfRequestsInTable) {
+            blockButton.checked = true
+        }
+        addUrlsToBlock(thisTabUrl, urlsOfRequestsInTable)
+        for (const url of urlsOfRequestsInTable) {
+            nedit.urls.push(url)            
+        }
+
+
+        button.removeAttribute('block')
+    } else {
+        for (const blockButton of buttonsOfRequestsInTable) {
+            blockButton.checked = false
+        }
+        removeUrlsToBlock(thisTabUrl, urlsOfRequestsInTable)
+        for (const url of urlsOfRequestsInTable) {
+            nedit.urls = nedit.urls.filter(blockedUrl => blockedUrl !== url)            
+        }
+
+        button.setAttribute('block', 'true')
+    }
+}
+
 const makeBlockAllButton = () => {
     const headContent = document.createElement('th')
-    headContent.innerHTML = '<th style="border-left-width: 0;"><button id="network-block_button" class="toblock">block</button></th>'
+    headContent.style.borderLeftWidth = '0'
+    const button = document.createElement('button')
+    button.id = 'network-block_button'
+    button.innerText = 'block'
+    button.setAttribute('block', 'true')
+    button.onclick = () => onBlockToggle(button)
+    headContent.appendChild(button)
+    // headContent.innerHTML = '<button id="network-block_button" class="toblock">block</button>'
+    
     return headContent
 }
 
-const activateColumn = (columnType) => {
+const activateColumn = (columnType,) => {
     columnAggregator.value = ''
     let headContent
     if (columnType === 'block') {
@@ -161,3 +222,20 @@ const activateColumn = (columnType) => {
 
 }
 columnAggregator.onchange = () => addColumn()
+
+const filterTableData = document.getElementById('programs-table_data')
+const addFilterTableRow = (filterText) => {
+    const row = document.createElement('tr')
+    row.id = `row-FNR-${filterText}`
+
+    addCell('block', filterText, row, 'FNR')
+    addCell('filter', filterText, row, 'FNR')
+
+    filterTableData.appendChild(row)
+}
+const makeFilterTable = () => {
+    filterTableData.innerHTML = ''
+    for (const filterText of filtersToShow) {
+        addFilterTableRow(filterText)
+    }
+}
