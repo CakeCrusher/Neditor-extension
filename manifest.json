@@ -26,6 +26,7 @@
             "utils.js",
             "background/onBeforeRequest.js",
             "background/onUpdated.js",
+            "background/messanger.js",
             "background/main.js"
         ],
         "persistent": true
