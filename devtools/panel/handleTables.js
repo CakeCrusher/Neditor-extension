@@ -34,19 +34,21 @@ const onBlockCheckboxClick = (checkbox, request) => {
     const url = requestNavigator('url', request)
     if (checkbox.checked) {
         addUrlsToBlock(thisTabUrl, [url])
-        nedit.urls.push(url)
+        filterTable()
+        // nedit.urls.push(url)
     } else {
         removeUrlsToBlock(thisTabUrl, [url])
-        nedit.urls = nedit.urls.filter(blockedUrl => blockedUrl !== url)
+        filterTable()
+        // nedit.urls = nedit.urls.filter(blockedUrl => blockedUrl !== url)
     }
 }
 const onBlockCheckboxClickTR = (checkbox, filterText) => {
     if (checkbox.checked) {
         addFilters(thisTabUrl, [filterText])
-        nedit.filters.push(filterText)
+        // nedit.filters.push(filterText)
     } else {
         removeFilters(thisTabUrl, [filterText])
-        nedit.filters = nedit.filters.filter(blockedUrl => blockedUrl !== filterText)
+        // nedit.filters = nedit.filters.filter(blockedUrl => blockedUrl !== filterText)
     }
 }
 
@@ -102,6 +104,7 @@ const makeTable = () => {
     }
 }
 
+// initiates requests to show and filters them
 const filterTable = () => {
     requestsToShow = [...allRequests]
     Object.keys(filters).forEach(filterKey => {
@@ -143,6 +146,7 @@ const addColumn = (columnType = columnAggregator.value) => {
 }
 
 const onBlockToggle = (button) => {
+    filterTable()
     const urlsOfRequestsInTable = requestsToShow.map(r => r.request.url)
     const buttonsOfRequestsInTable = []
     for (const url of urlsOfRequestsInTable) {
@@ -154,9 +158,9 @@ const onBlockToggle = (button) => {
             blockButton.checked = true
         }
         addUrlsToBlock(thisTabUrl, urlsOfRequestsInTable)
-        for (const url of urlsOfRequestsInTable) {
-            nedit.urls.push(url)            
-        }
+        // for (const url of urlsOfRequestsInTable) {
+            // nedit.urls.push(url)            
+        // }
 
 
         button.removeAttribute('block')
@@ -165,9 +169,9 @@ const onBlockToggle = (button) => {
             blockButton.checked = false
         }
         removeUrlsToBlock(thisTabUrl, urlsOfRequestsInTable)
-        for (const url of urlsOfRequestsInTable) {
-            nedit.urls = nedit.urls.filter(blockedUrl => blockedUrl !== url)            
-        }
+        // for (const url of urlsOfRequestsInTable) {
+            // nedit.urls = nedit.urls.filter(blockedUrl => blockedUrl !== url)            
+        // }
 
         button.setAttribute('block', 'true')
     }
@@ -237,5 +241,41 @@ const makeFilterTable = () => {
     filterTableData.innerHTML = ''
     for (const filterText of filtersToShow) {
         addFilterTableRow(filterText)
+    }
+}
+
+const customAddCell = (row, content) => {
+    const cell = document.createElement('td')
+    cell.appendChild(content)
+    row.appendChild(cell)
+}
+
+const blockedTableData = document.getElementById('blocked_table_data')
+const makeBlockedTable = () => {
+    blockedTableData.innerHTML = ''
+    for (const blockedUrlObject of parsedBlockedUrls) {
+        // {by: 'filter', which: filter, urls: []}
+        const row = document.createElement('tr')
+        
+        const blockedByContent = document.createElement('div')
+        blockedByContent.innerText = blockedUrlObject.by === 'filter' ? `filter: "${blockedUrlObject.which}"` : 'selected url'
+        customAddCell(row, blockedByContent)
+
+        let urlsBlockedContent
+        if (blockedUrlObject.by === 'filter') {
+            urlsBlockedContent = document.createElement('ul')
+            urlsBlockedContent.style = 'margin: 0; padding-left: 20px'
+            for (const url of blockedUrlObject.urls) {
+                const listItem = document.createElement('li')
+                listItem.innerText = url
+                urlsBlockedContent.appendChild(listItem)
+            }
+        } else if (blockedUrlObject.by === 'specificUrl') {
+            urlsBlockedContent = document.createElement('div')
+            urlsBlockedContent.innerText =  blockedUrlObject.urls[0]
+        }
+        customAddCell(row, urlsBlockedContent)
+
+        blockedTableData.appendChild(row)
     }
 }

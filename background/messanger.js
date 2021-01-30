@@ -19,7 +19,7 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
     } else {
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
             const rootUrl = urlRoot(tabs[0].url)
-            chrome.runtime.sendMessage({to: rootUrl, except: tabs[0].id, newNedit: changes[rootUrl].newValue})
+            chrome.runtime.sendMessage({to: rootUrl, msgType: 'neditUpdate', nedit: changes[rootUrl].newValue})
         })
     }
     

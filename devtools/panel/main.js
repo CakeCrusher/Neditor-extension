@@ -5,7 +5,6 @@ chrome.devtools.network.onRequestFinished.addListener((request) => {
     addRowToTable(networkTableColumn, networkTableData, request)
 })
 
-console.log('sending message');
 chrome.runtime.sendMessage({needDataPackage: true})
 
 // core columns added

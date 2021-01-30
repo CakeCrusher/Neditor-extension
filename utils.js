@@ -19,6 +19,39 @@ const urlRoot = (url) => {
     return url.split('/')[2]
 }
 
+
+
+const setStorageNedit = () => {
+    chrome.storage.sync.get(['test2'], (result) => {
+        console.log(result);
+    })
+}
+
+// make sure no blocked method reiterates
+const cleanNeditBlockedUrls = (nedit) => {
+    const cleanedNedit = {...nedit}
+    const filteredFilters = nedit.filters.filter(filterText => {
+        for (const innerFilterText of nedit.filters) {
+            if (filterText !== innerFilterText && filterText.includes(innerFilterText)) {
+                return false
+            }
+        }
+        return true
+    })
+    cleanedNedit.filters = filteredFilters
+    const filteredUrls = nedit.urls.filter(url => {
+        for (const filterText of cleanedNedit.filters) {
+            if (url.includes(filterText)) {
+                return false
+            }
+        }
+        return true
+    })
+    cleanedNedit.urls = filteredUrls
+
+    return cleanedNedit
+}
+
 // const editNedit = (siteUrl, callback) => {
 //     const rootUrl = urlRoot(siteUrl)
 //     chrome.storage.sync.get([rootUrl], (result) => {
@@ -40,7 +73,7 @@ const addUrlsToBlock = (siteUrl, urls) => {
             nedit.urls.push(url)
         }
         const neditForSite = {}
-        neditForSite[rootUrl] = nedit
+        neditForSite[rootUrl] = cleanNeditBlockedUrls(nedit)
         chrome.storage.sync.set(neditForSite)
         
         return nedit
@@ -55,7 +88,7 @@ const removeUrlsToBlock = (siteUrl, urls) => {
             nedit.urls = nedit.urls.filter(blockedUrl => blockedUrl !== url)
         }
         const neditForSite = {}
-        neditForSite[rootUrl] = nedit
+        neditForSite[rootUrl] = cleanNeditBlockedUrls(nedit)
         chrome.storage.sync.set(neditForSite)
         
         return nedit
@@ -72,7 +105,7 @@ const addFilters = (siteUrl, filterTexts) => {
             }
         }
         const neditForSite = {}
-        neditForSite[rootUrl] = nedit
+        neditForSite[rootUrl] = cleanNeditBlockedUrls(nedit)
         chrome.storage.sync.set(neditForSite)
         
         return nedit
@@ -83,13 +116,11 @@ const removeFilters = (siteUrl, filterTexts) => {
     const rootUrl = urlRoot(siteUrl)
     chrome.storage.sync.get([rootUrl], (result) => {
         const nedit = result[rootUrl]
-        console.log(nedit.filters);
         for (const filterText of filterTexts) {
             nedit.filters = nedit.filters.filter(filter => filter !== filterText)
         }
-        console.log(nedit.filters);
         const neditForSite = {}
-        neditForSite[rootUrl] = nedit
+        neditForSite[rootUrl] = cleanNeditBlockedUrls(nedit)
         chrome.storage.sync.set(neditForSite)
         
         return nedit
@@ -143,4 +174,23 @@ const inputSubmitUX = (submitElement, inputElement, callback) => {
             deactivate()
         }
     })
+}
+
+const parseBlockedUrls = (nedit) => {
+    const parsedBlockedUrls = []
+    const blockedByFilter = blockedUrlObjects.filter(blockedUrlObject => blockedUrlObject.by === 'filter')
+    for (const filter of nedit.filters) {
+        const urlsBlockedByFilter = {by: 'filter', which: filter, urls: []}
+        const objectsBlockedByFilter = blockedByFilter.filter(blockedUrlObject => blockedUrlObject.which === filter)
+        urlsBlockedByFilter.urls = objectsBlockedByFilter.map(object => object.blockedUrl)
+        if (urlsBlockedByFilter.urls.length) {
+            parsedBlockedUrls.push(urlsBlockedByFilter)
+        }
+    }
+    const blockedBySpecificUrl = blockedUrlObjects.filter(blockedUrlObject => blockedUrlObject.by === 'specificUrl')
+    for (const blockedUrlObject of blockedBySpecificUrl) {
+        const urlsBlockedBySpecificUrl = {by: 'specificUrl', which: blockedUrlObject.which, urls: [blockedUrlObject.blockedUrl]}
+        parsedBlockedUrls.push(urlsBlockedBySpecificUrl)
+    }
+    return parsedBlockedUrls
 }
