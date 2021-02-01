@@ -25,6 +25,7 @@
         "scripts": [
             "utils.js",
             "background/neditExecuters.js",
+            "background/setState.js",
             "background/onBeforeRequest.js",
             "background/onUpdated.js",
             "background/messanger.js",

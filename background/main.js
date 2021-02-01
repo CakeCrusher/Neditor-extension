@@ -2,6 +2,7 @@
 // chrome.storage.sync.clear(() => console.log('cleared'))
 
 const initializeStorage = (name, initialState, setVar) => {
+    // console.log(name);
     chrome.storage.sync.get([name], (result) => {
         if (result[name]) {
             setVar(result[name])
@@ -14,6 +15,7 @@ const initializeStorage = (name, initialState, setVar) => {
     })
 }
 
+
 const sendDataPackage = () => {
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
         let nedit
@@ -23,6 +25,7 @@ const sendDataPackage = () => {
         })
     })
 }
+
 
 // syncronizing vars with storage
 let activated
@@ -37,6 +40,7 @@ let darkMode
 initializeStorage('darkMode', false, (res) => {darkMode = res})
 
 let allNeditsById = {}
-
+let allProgressById = {}
 let allRequestsById = {}
+let allBlockedUrlsById = {}
 

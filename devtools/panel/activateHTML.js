@@ -1,6 +1,3 @@
-const filterInput = document.getElementById('program_description')
-const filterSubmit = document.getElementById('submit_program')
-
 const storageCheckbox = document.getElementById('storage_checkbox')
 const onStorageToggle = () => {
     toggleStorage(thisTabUrl, storageCheckbox.checked)
@@ -10,6 +7,8 @@ const initiateStorageState = () => {
     storageCheckbox.checked = nedit.storage
 }
 
+const filterSubmit = document.getElementById('submit_program')
+const filterInput = document.getElementById('program_description')
 const onFilterAdd = (filterText) => {
     if (!filtersToShow.includes(filterText)) {
         // fixes an issue where when a filter is added it is unchecked
@@ -18,10 +17,33 @@ const onFilterAdd = (filterText) => {
         // nedit.filters.push(filterText)
         filtersToShow.push(filterText)
         addFilterTableRow(filterText)
+        return true
+    } else {
+        return false
     }
 
 }
 inputSubmitUX(filterSubmit, filterInput, onFilterAdd)
+
+const currentNeditName = document.getElementById('current_edit')
+const setCurrentNeditName = () => {
+    if (nedit.name) {
+        currentNeditName.innerText = nedit.name
+    } else {
+        currentNeditName.innerHTML = '<i>None</i>'
+    }
+}
+
+const saveSubmit = document.getElementById('save')
+const saveInput = document.getElementById('edit_name')
+const onNeditSave = async (saveName) => {
+    nedit.name = saveName
+    const neditToSave = {}
+    neditToSave[urlRoot(thisTabUrl)] = nedit
+    chrome.storage.sync.set(neditToSave)
+    setCurrentNeditName()
+}
+inputSubmitUX(saveSubmit, saveInput, onNeditSave)
 
 const integrateButton = document.getElementById('programs-block_button')
 const onIntegrateToggle = (button) => {

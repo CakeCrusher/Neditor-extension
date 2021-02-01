@@ -14,10 +14,14 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
             nedit = msg.nedit
             filtersToShow = msg.nedit.filters
             makeFilterTable()
+            setCurrentNeditName()
             initiateStorageState()
             activateAfterNedit()
         }
         if (msg.msgType === 'backgroundRequestUrl') {
+            if (msg.requestUrl.includes('css')) {
+                console.log('msg.requestUrl: ', msg.requestUrl)
+            }
             backgroundRequestUrls.push(msg.requestUrl)
         }
         if (msg.msgType === 'neditUpdate') {
@@ -30,5 +34,11 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
             parsedBlockedUrls = parseBlockedUrls(nedit)
             makeBlockedTable()
         }
+        if (msg.msgType === 'setState') {
+            const container = document.getElementById('state_container')
+            const title = document.getElementById('state_title')
+            const content = document.getElementById('state_content_container')
+            stateAlert(msg.state, container, title, content)
+        } 
     }
 })

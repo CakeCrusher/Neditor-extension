@@ -14,6 +14,90 @@ const fetchGraphQL = async (schema) => {
     const res = await fetch("https://neditor-backend.herokuapp.com/graphql", requestOptions).then(res => res.json())
     return res
 }
+// RE-IMPLEMENT THIS
+// const saveNetworkEdit = async (neditForSchema) => {
+//     if (!emptyNedit(nedit)){
+//         console.log('HAS BEEN EDITED', blockData);
+        
+//         const rawRes = await fetchGraphQL(
+//             `query{
+//                 findNetworkEdit(
+//                 url: "${generalCurrentURL()}",
+//                 filters: [${blockData.programs.sort().map(program => `"${program}"`)}],
+//                 urls: [${filteredUrls.sort().map(url => `"${url}"`)}],
+//                 storage: ${blockData.storage}
+//                 ){
+//                 name
+//                 uses
+//                 _id
+//                 }
+//             }`
+//         )
+//         let findNetworkEdit = rawRes.data.findNetworkEdit
+//         console.log(findNetworkEdit);
+//         if (findNetworkEdit && used) {
+//             const rawIncrementNetworkEditUses = await fetchGraphQL(
+//                 `mutation{
+//                     incrementNetworkEditUses(
+//                     id: "${findNetworkEdit._id}"
+//                     ){
+//                     name
+//                     uses
+//                     _id
+//                     }
+//                 }`
+//             )
+//             const incrementNetworkEditUses = rawIncrementNetworkEditUses.data.incrementNetworkEditUses
+//         } else if (!findNetworkEdit) {
+//             console.log('make new NetworkEdit');
+//             const rawMakeNetworkEdit = await fetchGraphQL(
+//                 `mutation{
+//                     makeNetworkEdit(
+//                     name: "(${blockData.urls.length})${blockData.storage ? 'C' : ''}",
+//                     url: "${generalCurrentURL()}"
+//                     storage: ${blockData.storage},
+//                     filters: [${blockData.programs.sort().map(program => `"${program}"`)}],
+//                     urls: [${blockData.urls.sort().map(url => `"${url}"`)}]
+//                     ){
+//                     name
+//                     _id
+//                     }
+//                 }`
+//             )
+//             findNetworkEdit = rawMakeNetworkEdit.data.makeNetworkEdit
+//         }
+//         return findNetworkEdit
+//     }
+// }
+
+const bestName = (names, dataId, savedNedits) => {
+    const foundSavedNedit = savedNedits.find(savedNedit => savedNedit.id === dataId)
+    if (foundSavedNedit) {
+        return foundSavedNedit.name
+    }
+    const interestingNames = names.filter(name => {
+        let nameParse = name
+        if (name.includes('(') && name.includes(')')) {
+            if(Number(nameParse.split('(')[1].split(')')[0])) {
+                return false
+            }
+        }
+        return true
+    })
+    if (interestingNames.length) {
+        return interestingNames[0]
+    } else {
+        return names[0]
+    }
+}
+
+const modifyNeditForSchema = (nedit) => {
+    const neditForSchema = {...nedit}
+    neditForSchema.name = neditForSchema.name.toLowerCase()
+    neditForSchema.urls = nedit.urls.length ? nedit.urls.sort().map(url => `"${url}"`) : ''
+    neditForSchema.filters = nedit.filters.length ? nedit.filters.sort().map(filter => `"${filter}"`) : ''
+    return neditForSchema
+}
 
 const urlRoot = (url) => {
     return url.split('/')[2]
@@ -157,9 +241,15 @@ const inputSubmitUX = (submitElement, inputElement, callback) => {
         if (submitElement.getAttribute('disabled')) {
             null
         } else {
-            callback(inputElement.value)
-            inputElement.value = ''
-            deactivate()
+            if (callback(inputElement.value)) {
+                inputElement.value = ''
+                deactivate()
+            } else {
+                const inputBackgroundColor = inputElement.style.backgroundColor
+                inputElement.style.backgroundColor = '#ea433555'
+                setTimeout(() => {inputElement.style.backgroundColor = inputBackgroundColor}, 1000)
+            }
+
         }
     }
 
@@ -193,4 +283,23 @@ const parseBlockedUrls = (nedit) => {
         parsedBlockedUrls.push(urlsBlockedBySpecificUrl)
     }
     return parsedBlockedUrls
+}
+
+const emptyNedit = (nedit) => {
+    if (!nedit) {
+        return true
+    }
+    if (!nedit.storage && !nedit.urls.length && !nedit.filters.length) {
+        return true
+    } else {
+        return false
+    }
+}
+
+const stateAlert = (state, container, title, content) => {
+    const tipsHTMLString = state.tips.map(tip => `<div>${tip}</div>`).join(' ')
+    container.style = state.containerStyle
+    container.style.display = 'block'
+    title.innerText = state.id
+    content.innerHTML = tipsHTMLString
 }

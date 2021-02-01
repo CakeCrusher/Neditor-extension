@@ -204,18 +204,6 @@ td::-webkit-scrollbar {
     margin-bottom: 10px;
 }
 
-#current_state_info {
-    border-radius: 3px;
-    border-width: 2px;
-    border-style: solid;
-    margin-bottom: 10px;
-    padding: 10px;
-    padding-bottom: 0;
-    max-height: 75px;
-    overflow-y: scroll;
-    display: none;
-}
-
 .code_text {
     margin: 0;
     padding: 0;
@@ -237,4 +225,21 @@ td::-webkit-scrollbar {
 }
 #submit_program {
     opacity: 0.7;
+}
+
+
+#state_container {
+    padding: 5px;
+    border-radius: 3px;
+}
+#state_title {
+    margin: 0;
+    margin-bottom: 5px;
+}
+#state_content_container {
+    padding: 5px;
+    background-color: white;    
+    border-radius: 3px;
+    height: 17px;
+    overflow-y: scroll;
 }

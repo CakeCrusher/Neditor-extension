@@ -12,8 +12,13 @@
             <h1>To edit you must activate Neditor</h1>
         </div>
         <div id="content">
-            <div id="current_state_info" >
+            <div id="state_container" style="display: none;">
+                <h2 id="state_title">
 
+                </h2>
+                <div id="state_content_container">
+                    
+                </div>
             </div>
             <div>
                 <h2 style="font-weight: bold; margin-bottom: 5px;">Current nedit:</h2>
@@ -23,9 +28,9 @@
                 </div>
             </div>
             <div class="side_by_side" style="opacity: 0.7">
-                <div style="font-size: 16px; margin-right: 10px; align-self: center;">Save nedit as:</div>
-                <input placeholder="name this nedit" style="font-size: 14px; margin-right: 10px;" class="general-content"  id="edit_name" />
-                <button class="primary-button" id="save" disabled style="opacity: 0.7">save</button>
+                <label for="edit_name" style="font-size: 16px; margin-right: 10px; align-self: center;">Save nedit as:</label>
+                <input id="edit_name" placeholder="name this nedit" style="font-size: 14px; margin-right: 10px;" class="general-content" />
+                <button class="primary-button" id="save" disabled="true" style="cursor: auto; opacity: 0.5;">save</button>
             </div>
             <!-- <div style="opacity: 0.7; margin-top: 10px">
                 <button class="primary-button" id="show_saved_edits">show saved edits</button>
@@ -41,7 +46,7 @@
             <div class="side_by_side" id="description_container" style="margin-bottom: 10px;">
                 <label for="program_description"><div style="font-size: 16px; margin-right: 10px; align-self: center;">Block any url with the text: </div></label>
                 <input style="font-size: 14px; margin-right: 10px;" class="general-content" id="program_description">
-                <button style="cursor: auto; opacity: 0.5;" class="primary-button" id="submit_program" disabled="true" >add block text</button>
+                <button style="cursor: auto; opacity: 0.5;" class="primary-button" id="submit_program" disabled="true" >add filter</button>
             </div>
             <table id="programs_table" cellspacing="0" cellpadding="5" style="margin-bottom: 20px;">
                 <tr>
@@ -105,7 +110,7 @@
         <script src="../../utils.js"></script>
         <script src="init.js"></script>
         <script src="handleTables.js"></script>
-        <script src="buttonsHandler.js"></script>
+        <script src="activateHTML.js"></script>
         <script src="messageListener.js"></script>
         <script src="main.js"></script>
     </body>

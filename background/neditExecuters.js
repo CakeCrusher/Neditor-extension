@@ -1,20 +1,20 @@
 const blockRequest = (nedit, request) => {
     const requestUrl = request.url
 
-    if (nedit) {
+    if (!emptyNedit(nedit)) {
         for (const filter of nedit.filters) {
             if (requestUrl.includes(filter)) {
                 chrome.runtime.sendMessage(
-                    {to: request.tabId, msgType: 'blockedUrl', blockedUrl: requestUrl, by: 'filter', which: filter}
-                )
+                    {to: request.tabId, msgType: 'blockedUrl', blockedUrl: requestUrl, by: 'filter', which: filter},
+                    (ignoreThis) => {if (!window.chrome.runtime.lastError) {/*checks an error */}})
                 return true
             }
         }
     
         if (nedit.urls.includes(requestUrl)) {
             chrome.runtime.sendMessage(
-                {to: request.tabId, msgType: 'blockedUrl', blockedUrl: requestUrl, by: 'specificUrl', which: requestUrl}
-            )
+                {to: request.tabId, msgType: 'blockedUrl', blockedUrl: requestUrl, by: 'specificUrl', which: requestUrl},
+            (ignoreThis) => {if (!window.chrome.runtime.lastError) {/*checks an error */}})
             return true
         }
     }
