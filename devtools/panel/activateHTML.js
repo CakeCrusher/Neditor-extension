@@ -36,12 +36,10 @@ const onFilterAdd = (filterText) => {
         // fixes an issue where when a filter is added it is unchecked
         nedit.filters.push(filterText)
         addFilters(thisTabUrl, [filterText])
-        console.log(filtersToShow);
         // something about add filters changes filtersToShow
         if (!filtersToShow.includes(filterText)) {
             filtersToShow.push(filterText)
         }
-        console.log(filtersToShow);
 
         // addFilterTableRow(filterText)
         return true
@@ -138,7 +136,7 @@ const setRequestCount = () => {
 }
 const blocksCountSpan = document.getElementById('blocked_request_count')
 const setBlockedCount = () => {
-    blocksCountSpan.innerText = parsedBlockedUrls.length
+    blocksCountSpan.innerText = blockedUrlObjects.length
 }
 
 

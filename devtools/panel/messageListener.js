@@ -34,7 +34,6 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
                 filtersToShow = msg.nedit.filters
             }
             nedit = msg.nedit
-            console.log('nedit updated');
             initiateCurrentNeditName()
             filterTable()
             displayClearNedit()
