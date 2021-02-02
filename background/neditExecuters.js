@@ -1,7 +1,7 @@
 const blockRequest = (nedit, request) => {
     const requestUrl = request.url
     // console.log('emptyNedit(nedit): ', nedit)
-    if (!emptyNedit(nedit)) {
+    if (!emptyNedit(nedit) && activated) {
 
         for (const filter of nedit.filters) {
             if (requestUrl.includes(filter)) {
@@ -23,7 +23,7 @@ const blockRequest = (nedit, request) => {
 }
 
 const clearStorage = (nedit, tabUrl) => {
-    if (nedit.storage) {
+    if (nedit.storage && activated) {
         chrome.browsingData.remove({
             "origins": [tabUrl]
         }, {

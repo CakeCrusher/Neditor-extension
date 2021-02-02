@@ -1,0 +1,117 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="main.css">
+        <link rel="stylesheet" href="toggle.css">
+    </head>
+    <body>
+        <div style="width: 250px;"></div>
+        <div id="state_container" style="display: none;">
+            <h2 id="state_title">
+
+            </h2>
+            <div id="state_content_container">
+                
+            </div>
+        </div>
+        <div style="align-items: center; position: absolute; right: 0;" class="side_by_side head_container">
+            <h2 class="main_title">Neditor</h2>
+            <label class="switch">
+                <input id="extension_toggle" type="checkbox" checked>
+                <div>
+                    <span></span>
+                </div>
+            </label>
+        </div>
+        <div style="display: none; height: 30px;" id="propup"></div>
+        <div id="deactivated_content" style="display: none;">
+            <div style="height: 50px"></div>
+            <h2 ><i>Turn on neditor to use</i></h2>
+        </div>
+        <div id="popup_content">
+            <div>
+                <h2 style="font-weight: bold">Current nedit:</h2>
+                <div class="side_by_side">
+                    <h2 id="current_edit" style="margin-right: 5px; font-weight: lighter;"><i>None</i></h2>
+                    <div><button id="clear_nedit_button" style="display: none;" class="danger-button button-s">clear</button></div>
+                </div>
+            </div>
+            <!--  -->
+
+            <h2 class="segment_title">Browse nedits</h2>
+            <div id="edits_discovery_container">
+                <div id="discovery_options" class="side_by_side" style="padding: 0;">
+                    <div id="search-option" style="background-color: white; border-bottom-right-radius: 3px;" class="discovery_option">
+                        <img id="edit_search_icon" class="search_icon " src="../icons/search.svg" /><input id="search-button" class="head_inputs" placeholder="Search nedits">
+                    </div>
+                    <div id="recommended-option" style=" border-bottom-left-radius: 3px;" class="discovery_option">
+                        <button id="recommended-button" class="primary-button button-m">recommended</button>
+                    </div>
+                </div>
+                <div id="search-info">
+                    <h2 style="margin: 0px 10px;"><span id="query-title">All</span> nedits </h2>
+                    <div style="margin: 0px 10px; opacity: 0.5; z-index: 0; position: relative;">by most popular</div>
+                </div>
+                <div style="display: none;" id="recommended-info">
+                    <h2 style="margin: 0px 10px;">Recommended nedits</h2>
+                    <div style="margin: 0px 10px; opacity: 0.5;">determined by "Recommend if nedit deals with"<span id="search_list"></span></div>
+                </div>
+                <ol id="edits_to_show">
+                    
+                </ol>
+            </div>
+            <!--  -->
+            <!-- <div style="margin-top: 5px">
+                <button class="primary-button" id="show_most_popular_edits"><span id="most_popular_edits_text" style="opacity: 0.7">show</span> most popular edits</button>
+                <ol id="most_popular_edits_container" style="display: none">
+
+                </ol>
+            </div> -->
+            <!-- <div style="margin-top: 5px">
+                <button class="primary-button" id="show_save_edits_popup"><span id="save_edits_popup_text" style="opacity: 0.7">show</span> saved nedits</button>
+                <ul id="save_edits_popup_container" style="display: none">
+                
+                </ul>
+            </div> -->
+            <div>
+                <div class="side_by_side">
+                    <label for="automatic_blocking_input"><h2 class="segment_title" style="margin-bottom: 0;">Automatic blocking</h2></label>
+                    <input id="automatic_blocking_input" checked type="checkbox">
+                </div>
+                <div style="margin-bottom: 10px; opacity: 0.5;">immediately open a new tab with the nedit</div>
+                <div style="display: flex;" id="automatic_blocking_container" class="side_by_side">
+                    <div class="add_column-text" style="font-size: 16px; margin-right: 10px;">Select nedit by:</div>
+                    <select class="add_column-text" id="automatic_blocking_by">
+                        <option value="most popular">most popular</option>
+                        <option value="recommended">recommended</option>
+                    </select>
+                </div>
+            </div>
+            <div id="recommendation_container">
+                <h2 class="segment_title">Recommendations setup</h2>
+                <div style="margin-bottom: 10px;" class="side_by_side">
+                    <label for="recommendation_input" class="add_column-text" style="font-size: 16px;">Recommend if nedit deals with:</label>
+                    <input style="width: 90px" id="recommendation_input">
+                    <button id="recommend_submit" disabled="true" style="cursor: auto; opacity: 0.5;" class="primary-button button-m">submit</button>
+                </div>
+                <div style="display: none;" id="recommendation_words_wrapper">
+                    <div id="recommendation_words_container">
+
+                    </div>
+                    <button id="clear_recommend_data" class="danger-button button-s">clear</button>
+                </div>
+            </div>
+            <h3 class="segment_title">Begin nediting</h3>
+            <ol style="padding-left: 20px;">
+                <li><strong>Inspect</strong> the page by: right clicking -> and clicking "inspect", (Ctrl+Shift+i)</li>
+                <li>Look through the inspector <strong>top/head bar</strong> and click on Neditor. (If you dont see Neditor look for an arrow on the same bar ">>", click on that, then click Neditor)</li>
+                <li>Begin nediting!</li>
+                <li><strong>NOTE: When nediting ALWAYS "Hard reload" (Ctrl+Shift+r)</strong></li>
+            </ol>
+        </h2>
+        <script src="../utils.js"></script>
+        <script src="init.js"></script>
+        <script src="messageListener.js"></script>
+        <script src="activateHTML.js"></script>
+        <script src="main.js"></script>
+    </body>
+</html>

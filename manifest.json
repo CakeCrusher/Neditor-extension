@@ -18,7 +18,7 @@
     },
     "browser_action": {
         "default_icon": "icons/icon16.png",
-        "default_popup": "popup/popup.html",
+        "default_popup": "popup/main.html",
         "default_title": "Neditor"
     },
     "background": {
@@ -27,6 +27,7 @@
             "background/neditExecuters.js",
             "background/setState.js",
             "background/onBeforeRequest.js",
+            "background/automaticNeditHandler.js",
             "background/onUpdated.js",
             "background/messanger.js",
             "background/main.js"

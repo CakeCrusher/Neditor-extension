@@ -6,4 +6,5 @@ let blockedUrlObjects = []
 let parsedBlockedUrls = []
 let thisTabUrl
 let filtersToShow
+let activated
 let nedit

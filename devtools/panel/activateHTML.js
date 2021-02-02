@@ -1,18 +1,5 @@
 const clearNeditButton = document.getElementById('clear_nedit_button')
-const onClearNedit = () => {
-    nedit = {name: null, filters: [], urls: [], storage: false}
-    const neditToSet = {}
-    neditToSet[urlRoot(thisTabUrl)] = nedit
-    chrome.storage.sync.set(neditToSet)
-}
-const displayClearNedit = () => {
-    if (!emptyNedit(nedit)) {
-        clearNeditButton.style.display = 'block'
-    } else {
-        clearNeditButton.style.display = 'none'
-    }
-}
-clearNeditButton.onclick = onClearNedit
+clearNeditButton.onclick = () => onClearNedit(thisTabUrl)
 
 const storageCheckbox = document.getElementById('storage_checkbox')
 const onStorageToggle = () => {
@@ -139,9 +126,24 @@ const setBlockedCount = () => {
     blocksCountSpan.innerText = blockedUrlObjects.length
 }
 
+warning
+content
+const panelContent = document.getElementById('content')
+const panelAltContent = document.getElementById('warning')
+const setNeditActivated = () => {
+    panelContent.style.display = 'none'
+    panelAltContent.style.display = 'none'
+    if (activated) {
+        panelContent.style.display = 'block'
+    } else {
+        panelAltContent.style.display = 'block'
+    }
+}
+
 
 const activateAfterNedit = () => {
-    displayClearNedit()
+    setNeditActivated()
+    displayClearNedit(nedit, clearNeditButton)
     storageCheckbox.onclick = onStorageToggle
     integrateButton.onclick = () => onIntegrateToggle(integrateButton)
 }

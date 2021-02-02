@@ -419,3 +419,65 @@ const stateAlert = (state, container, title, content) => {
     title.innerText = state.id
     content.innerHTML = tipsHTMLString
 }
+
+const onClearNedit = (thisTabUrl) => {
+    const nedit = {name: null, filters: [], urls: [], storage: false}
+    const neditToSet = {}
+    neditToSet[urlRoot(thisTabUrl)] = nedit
+    chrome.storage.sync.set(neditToSet)
+}
+const displayClearNedit = (nedit, clearNeditButton) => {
+    if (!emptyNedit(nedit)) {
+        clearNeditButton.style.display = 'block'
+    } else {
+        clearNeditButton.style.display = 'none'
+    }
+}
+
+const getStorage = (storageName, callback) => {
+    chrome.storage.sync.get([storageName], (result) => {
+        callback(result[storageName])
+    })
+}
+
+const toggleNeditor = (neditorActive) => {
+    chrome.storage.sync.set({activated: neditorActive})
+}
+
+const onToggleNeditor = (toggledTo, contentElement, altContentElement) => {
+    if (toggledTo) {
+        altContentElement.style.display = 'none'
+        contentElement.style.display = 'block'
+    } else {
+        altContentElement.style.display = 'block'
+        contentElement.style.display = 'none'
+    }
+}
+
+const addRecommendationWord = (word) => {
+    chrome.storage.sync.get(['recommendationWords'], (result) => {
+        if (!result.recommendationWords.includes(word)) {
+            const newRecommendationWords = [...result.recommendationWords]
+            newRecommendationWords.push(word)
+            chrome.storage.sync.set({recommendationWords: newRecommendationWords})
+        }
+    })
+}
+
+// runs through all recommendationWords then through all neditData in this url to only show recommended
+const filterByRecommendationWords = (recommendationWords, neditsData) => {
+    const recommendedNeditsToShow = []
+
+    for (const word of recommendationWords) {
+        for (const neditDataFromAll of neditsData) {
+            if (
+                !recommendedNeditsToShow.find(neditData => neditData._id === neditDataFromAll._id) &&
+                neditDataFromAll.name.find(neditDataName => neditDataName.includes(word))
+            ) {
+                recommendedNeditsToShow.push(neditDataFromAll)
+            }
+        }
+    }
+
+    return recommendedNeditsToShow
+}

@@ -1,4 +1,3 @@
-
 chrome.webRequest.onBeforeRequest.addListener((request) => {
     if (activated && request.url.slice(0,19) !== 'chrome-extension://') {
         // handle request info

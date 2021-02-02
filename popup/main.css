@@ -1,0 +1,184 @@
+#current_edit {
+    font-weight: bold;
+}
+h2 {
+    margin: 0;
+    margin-bottom: 5px;
+}
+.side_by_side {
+    display: flex;
+    flex-direction: row;
+    padding-right: 10px;
+    
+}
+.head_container {
+    align-items: center;
+}
+.main_title {
+    margin-right: 10px;
+}
+.primary-button {
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 3px;
+    border: 2px solid black;
+    padding: 5px 10px;
+    color: black;
+    background-color: white;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.primary-button:hover {
+    color: white;
+    background-color: black;
+    text-decoration: none;
+}
+.button-s {
+    padding: 2px 10px;
+}
+.list_text {
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.tips-text {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+#current_state_info {
+    border-radius: 3px;
+    border-width: 2px;
+    border-style: solid;
+    margin-bottom: 10px;
+    padding: 10px;
+    padding-bottom: 0;
+    max-height: 75px;
+    overflow-y: scroll;
+    display: none;
+}
+
+/*  */
+.button-m {
+    padding: 4px 10px;
+}
+.discovery_option {
+    padding: 5px 10px;
+    background-color: rgb(30,30,30);
+}
+#discovery_options {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+#edits_discovery_container {
+    width: min-content;
+    max-height: 200px;
+    overflow-y: scroll;
+    margin: 0;
+    padding: 0;
+    border-radius: 3px;
+    border: 2px solid rgb(30,30,30);
+}
+#search_list {
+    width: 100px;
+    overflow: hidden;
+    font-weight: bold;
+}
+#edit_search_icon {
+    cursor: pointer;
+}
+.search_icon {
+    position: absolute;
+    width: 20px;
+    margin: 3px;
+}
+.head_inputs {
+    background-color: white;
+    padding: 4px;
+    padding-left: 20px;
+    color: black;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 3px;
+    border:  black 2px solid;
+}
+#recommendation_container {
+    width: fit-content;
+}
+#recommendation_input {
+    margin-right: 10px;
+}
+.danger-button {
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 3px;
+    border: 2px solid rgb(140, 35, 35);
+    /* padding: 5px 10px; */
+    padding: 2px 10px;
+    color: rgb(140, 35, 35);
+    background-color: white;
+    text-decoration: underline;
+    cursor: pointer;
+}
+#clear_recommend_data {
+    border-radius: 0;
+    border-top-left-radius: 3px;
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+}
+.danger-button:hover {
+    color: white;
+    background-color: rgb(140, 35, 35);
+    text-decoration: none;
+}
+#recommendation_words_wrapper {
+    position: relative;
+    border: 2px solid black;
+    border-radius: 3px;
+    padding: 5px;
+    width: 385px;
+    overflow: hidden;
+}
+#recommendation_words_container {
+    display: flex;
+    flex-wrap: wrap;
+}
+.recommendation-word {
+    background-color: rgb(30,30,30);
+    color: white;
+    padding: 2px 5px;
+    border-radius: 3px;
+    margin: 5px;
+}
+.segment_title {
+    /* font-weight: lighter; */
+    margin: 0;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    margin-right: 5px;
+    padding: 0;
+}
+#automatic_blocking_input {
+    align-self: flex-end;
+    height: 20px;
+    width: 20px;
+}
+
+
+#state_container {
+    padding: 5px;
+    border-radius: 3px;
+}
+#state_title {
+    margin: 0;
+    margin-bottom: 5px;
+}
+#state_content_container {
+    padding: 5px;
+    background-color: white;    
+    border-radius: 3px;
+    height: 17px;
+    overflow-y: scroll;
+}

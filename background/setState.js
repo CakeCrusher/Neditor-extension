@@ -76,9 +76,7 @@ const setIcon = (tabId) => {
     const currentProgress = allProgressById[tabId]
 
     if (emptyNedit(currentNedit) || !activated) {
-        // const stateToSet = neditStates.find(state => state.id === 'Nedits!')
 
-        // setState(stateToSet, tabId)
     } else {
         const neditUrlsBlocked = []
         for (const url of currentNedit.urls) {

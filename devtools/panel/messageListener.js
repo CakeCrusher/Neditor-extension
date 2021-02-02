@@ -18,12 +18,17 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         if (msg.msgType === 'dataPackage') {
             thisTabUrl = msg.thisTabUrl
             nedit = msg.nedit
+            activated = msg.activated
             filtersToShow = msg.nedit.filters
             setNeditFromData(nedit, thisTabUrl)
             makeFilterTable()
             initiateCurrentNeditName()
             initiateStorageState()
             activateAfterNedit()
+        }
+        if (msg.msgType === 'newNeditorActive') {
+            activated = msg.active
+            setNeditActivated()
         }
         if (msg.msgType === 'backgroundRequestUrl') {
             backgroundRequestUrls.push(msg.requestUrl)
@@ -36,7 +41,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
             nedit = msg.nedit
             initiateCurrentNeditName()
             filterTable()
-            displayClearNedit()
+            displayClearNedit(nedit, clearNeditButton)
             makeFilterTable()
         }
         if (msg.msgType === 'blockedUrl') {

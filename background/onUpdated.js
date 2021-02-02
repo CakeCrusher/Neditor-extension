@@ -4,11 +4,10 @@ chrome.tabs.onUpdated.addListener((_tabId, info, tabInfo) => {
         (info.status === 'loading' && !info.url && allProgressById[tabInfo.id] !== 'loading') ||
         (info.status === 'loading' && info.url)
     ) {
-        allProgressById[tabInfo.id] = 'loading'
         // gets the users nedit for this url from storage
-        chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+        chrome.tabs.query({}, (tabs) => {
             chrome.runtime.sendMessage(
-                {to: tabs[0].id, msgType: 'reload', resetRequests: true},
+                {to: tabInfo.id, msgType: 'reload', resetRequests: true},
             (ignoreThis) => {if (!window.chrome.runtime.lastError) {/*checks an error */}})
             
             const tabLoading = tabs.find(tab => tab.id === tabInfo.id)
@@ -18,6 +17,16 @@ chrome.tabs.onUpdated.addListener((_tabId, info, tabInfo) => {
             } else {
                 tabLoadingUrl = tabLoading.pendingUrl ? tabLoading.pendingUrl : tabLoading.url
             }
+
+            if (
+                tabLoadingUrl &&
+                allProgressById[tabInfo.id] !== 'loading' &&
+                activated
+            ) {
+                automaticNeditHandler(tabLoadingUrl)
+            }
+            allProgressById[tabInfo.id] = 'loading'
+
 
             chrome.storage.sync.get([urlRoot(tabLoadingUrl)], (result) => {
                 if (result[urlRoot(tabLoadingUrl)]) {
