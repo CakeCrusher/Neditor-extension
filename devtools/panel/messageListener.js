@@ -30,10 +30,15 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
             setRequestCount()
         }
         if (msg.msgType === 'neditUpdate') {
+            if (msg.brandNew) {
+                filtersToShow = msg.nedit.filters
+            }
             nedit = msg.nedit
+            console.log('nedit updated');
             initiateCurrentNeditName()
             filterTable()
-
+            displayClearNedit()
+            makeFilterTable()
         }
         if (msg.msgType === 'blockedUrl') {
             blockedUrlObjects.push(msg)

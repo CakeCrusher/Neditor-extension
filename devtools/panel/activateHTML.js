@@ -1,3 +1,19 @@
+const clearNeditButton = document.getElementById('clear_nedit_button')
+const onClearNedit = () => {
+    nedit = {name: null, filters: [], urls: [], storage: false}
+    const neditToSet = {}
+    neditToSet[urlRoot(thisTabUrl)] = nedit
+    chrome.storage.sync.set(neditToSet)
+}
+const displayClearNedit = () => {
+    if (!emptyNedit(nedit)) {
+        clearNeditButton.style.display = 'block'
+    } else {
+        clearNeditButton.style.display = 'none'
+    }
+}
+clearNeditButton.onclick = onClearNedit
+
 const storageCheckbox = document.getElementById('storage_checkbox')
 const onStorageToggle = () => {
     toggleStorage(thisTabUrl, storageCheckbox.checked)
@@ -10,13 +26,24 @@ const initiateStorageState = () => {
 const filterSubmit = document.getElementById('submit_program')
 const filterInput = document.getElementById('program_description')
 const onFilterAdd = (filterText) => {
+    // used from "cleanNeditBlockedUrls" to prevent repetition
+    for (const innerFilterText of nedit.filters) {
+        if (filterText !== innerFilterText && filterText.includes(innerFilterText)) {
+            return false
+        }
+    }
     if (!filtersToShow.includes(filterText)) {
         // fixes an issue where when a filter is added it is unchecked
         nedit.filters.push(filterText)
         addFilters(thisTabUrl, [filterText])
-        // nedit.filters.push(filterText)
-        filtersToShow.push(filterText)
-        addFilterTableRow(filterText)
+        console.log(filtersToShow);
+        // something about add filters changes filtersToShow
+        if (!filtersToShow.includes(filterText)) {
+            filtersToShow.push(filterText)
+        }
+        console.log(filtersToShow);
+
+        // addFilterTableRow(filterText)
         return true
     } else {
         return false
@@ -116,6 +143,7 @@ const setBlockedCount = () => {
 
 
 const activateAfterNedit = () => {
+    displayClearNedit()
     storageCheckbox.onclick = onStorageToggle
     integrateButton.onclick = () => onIntegrateToggle(integrateButton)
 }
