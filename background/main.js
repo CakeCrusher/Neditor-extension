@@ -2,7 +2,6 @@
 // chrome.storage.sync.clear(() => console.log('cleared'))
 
 const initializeStorage = (name, initialState, setVar) => {
-    // console.log(name);
     chrome.storage.sync.get([name], (result) => {
         if (result[name]) {
             setVar(result[name])

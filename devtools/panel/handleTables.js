@@ -100,7 +100,9 @@ const addRowToTable = (columns, tableData, request) => {
 const makeTable = () => {
     networkTableData.innerHTML = ''
     for (const request of requestsToShow) {
-        addRowToTable(networkTableColumn, networkTableData, request)
+        if (backgroundRequestUrls.includes(request.request.url)) {
+            addRowToTable(networkTableColumn, networkTableData, request)
+        }
     }
 }
 

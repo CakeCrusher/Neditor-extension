@@ -5,27 +5,33 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
             testRequests = []
             blockedUrlObjects = []
             parsedBlockedUrls = []
+            backgroundRequestUrls = []
+            const container = document.getElementById('state_container')
+            hideStateAlert(container)
+            setNeditFromData(nedit, thisTabUrl)
             resetTables([networkTableData])
             makeBlockedTable()
+            setRequestCount()
+            setBlockedCount()
         }
         // if dataPackage is sent
         if (msg.msgType === 'dataPackage') {
             thisTabUrl = msg.thisTabUrl
             nedit = msg.nedit
             filtersToShow = msg.nedit.filters
+            setNeditFromData(nedit, thisTabUrl)
             makeFilterTable()
-            setCurrentNeditName()
+            initiateCurrentNeditName()
             initiateStorageState()
             activateAfterNedit()
         }
         if (msg.msgType === 'backgroundRequestUrl') {
-            if (msg.requestUrl.includes('css')) {
-                console.log('msg.requestUrl: ', msg.requestUrl)
-            }
             backgroundRequestUrls.push(msg.requestUrl)
+            setRequestCount()
         }
         if (msg.msgType === 'neditUpdate') {
             nedit = msg.nedit
+            initiateCurrentNeditName()
             filterTable()
 
         }
@@ -33,6 +39,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
             blockedUrlObjects.push(msg)
             parsedBlockedUrls = parseBlockedUrls(nedit)
             makeBlockedTable()
+            setBlockedCount()
         }
         if (msg.msgType === 'setState') {
             const container = document.getElementById('state_container')

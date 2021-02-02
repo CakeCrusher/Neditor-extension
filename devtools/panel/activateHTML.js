@@ -21,27 +21,34 @@ const onFilterAdd = (filterText) => {
     } else {
         return false
     }
-
 }
 inputSubmitUX(filterSubmit, filterInput, onFilterAdd)
 
 const currentNeditName = document.getElementById('current_edit')
-const setCurrentNeditName = () => {
-    if (nedit.name) {
-        currentNeditName.innerText = nedit.name
-    } else {
-        currentNeditName.innerHTML = '<i>None</i>'
-    }
+const initiateCurrentNeditName = () => {
+    setCurrentNeditName(nedit, currentNeditName)
 }
 
 const saveSubmit = document.getElementById('save')
 const saveInput = document.getElementById('edit_name')
 const onNeditSave = async (saveName) => {
-    nedit.name = saveName
-    const neditToSave = {}
-    neditToSave[urlRoot(thisTabUrl)] = nedit
-    chrome.storage.sync.set(neditToSave)
-    setCurrentNeditName()
+    if (!emptyNedit(nedit)) {
+        nedit.name = saveName
+        setCurrentNeditName(nedit, currentNeditName)
+
+        const neditToSave = {}
+        neditToSave[urlRoot(thisTabUrl)] = nedit
+        chrome.storage.sync.set(neditToSave)
+        
+        const savedNeditData = await saveNedit(nedit, thisTabUrl)
+        
+        const neditForSchema = modifyNeditForSchema(nedit)
+        await setName(neditForSchema.name, savedNeditData._id)
+        
+        return true
+    } else {
+        return false
+    }
 }
 inputSubmitUX(saveSubmit, saveInput, onNeditSave)
 
@@ -97,6 +104,15 @@ const selectTable = (tableOptionElement) => {
 tableOptions.forEach(tableOptionElement => {
     tableOptionElement.onclick = () => selectTable(tableOptionElement)
 })
+
+const requestCountSpan = document.getElementById('request_count')
+const setRequestCount = () => {
+    requestCountSpan.innerText = allRequests.filter(request => backgroundRequestUrls.includes(request.request.url)).length
+}
+const blocksCountSpan = document.getElementById('blocked_request_count')
+const setBlockedCount = () => {
+    blocksCountSpan.innerText = parsedBlockedUrls.length
+}
 
 
 const activateAfterNedit = () => {

@@ -1,13 +1,24 @@
-chrome.tabs.onUpdated.addListener((_tabId, _info, tabInfo) => {
-    // console.log('tabId: ', tabId)
-    // console.log('info: ', info)
+chrome.tabs.onUpdated.addListener((_tabId, info, tabInfo) => {
     // on the start of page load
-    if (tabInfo.status === 'loading' && allProgressById[tabInfo.id] !== 'loading') {
+    if (
+        (info.status === 'loading' && !info.url && allProgressById[tabInfo.id] !== 'loading') ||
+        (info.status === 'loading' && info.url)
+    ) {
         allProgressById[tabInfo.id] = 'loading'
         // gets the users nedit for this url from storage
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+            chrome.runtime.sendMessage(
+                {to: tabs[0].id, msgType: 'reload', resetRequests: true},
+            (ignoreThis) => {if (!window.chrome.runtime.lastError) {/*checks an error */}})
+            
             const tabLoading = tabs.find(tab => tab.id === tabInfo.id)
-            const tabLoadingUrl = tabLoading.pendingUrl ? tabLoading.pendingUrl : tabLoading.url
+            let tabLoadingUrl
+            if (info.url) {
+                tabLoadingUrl = info.url
+            } else {
+                tabLoadingUrl = tabLoading.pendingUrl ? tabLoading.pendingUrl : tabLoading.url
+            }
+
             chrome.storage.sync.get([urlRoot(tabLoadingUrl)], (result) => {
                 if (result[urlRoot(tabLoadingUrl)]) {
                     allNeditsById[tabInfo.id] = result[urlRoot(tabLoadingUrl)]
@@ -18,10 +29,12 @@ chrome.tabs.onUpdated.addListener((_tabId, _info, tabInfo) => {
                 }
                 allBlockedUrlsById[tabInfo.id] = []
                 allRequestsById[tabInfo.id] = []
+                prepareNotification(allNeditsById[tabInfo.id], tabLoadingUrl, tabInfo.id)
                 setIcon(tabInfo.id)
+                saveNedit(allNeditsById[tabInfo.id], tabLoadingUrl)
             })
         })
-        chrome.runtime.sendMessage({to: 'all', msgType: 'reload', resetRequests: true}, (ignoreThis) => {if (!window.chrome.runtime.lastError) {/*checks an error */}})
+        
         sendDataPackage()
     }
     if (tabInfo.status === 'complete' && allProgressById[tabInfo.id] === 'loading') {

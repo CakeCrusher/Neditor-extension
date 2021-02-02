@@ -14,61 +14,153 @@ const fetchGraphQL = async (schema) => {
     const res = await fetch("https://neditor-backend.herokuapp.com/graphql", requestOptions).then(res => res.json())
     return res
 }
+
 // RE-IMPLEMENT THIS
-// const saveNetworkEdit = async (neditForSchema) => {
-//     if (!emptyNedit(nedit)){
-//         console.log('HAS BEEN EDITED', blockData);
-        
-//         const rawRes = await fetchGraphQL(
-//             `query{
-//                 findNetworkEdit(
-//                 url: "${generalCurrentURL()}",
-//                 filters: [${blockData.programs.sort().map(program => `"${program}"`)}],
-//                 urls: [${filteredUrls.sort().map(url => `"${url}"`)}],
-//                 storage: ${blockData.storage}
-//                 ){
-//                 name
-//                 uses
-//                 _id
-//                 }
-//             }`
-//         )
-//         let findNetworkEdit = rawRes.data.findNetworkEdit
-//         console.log(findNetworkEdit);
-//         if (findNetworkEdit && used) {
-//             const rawIncrementNetworkEditUses = await fetchGraphQL(
-//                 `mutation{
-//                     incrementNetworkEditUses(
-//                     id: "${findNetworkEdit._id}"
-//                     ){
-//                     name
-//                     uses
-//                     _id
-//                     }
-//                 }`
-//             )
-//             const incrementNetworkEditUses = rawIncrementNetworkEditUses.data.incrementNetworkEditUses
-//         } else if (!findNetworkEdit) {
-//             console.log('make new NetworkEdit');
-//             const rawMakeNetworkEdit = await fetchGraphQL(
-//                 `mutation{
-//                     makeNetworkEdit(
-//                     name: "(${blockData.urls.length})${blockData.storage ? 'C' : ''}",
-//                     url: "${generalCurrentURL()}"
-//                     storage: ${blockData.storage},
-//                     filters: [${blockData.programs.sort().map(program => `"${program}"`)}],
-//                     urls: [${blockData.urls.sort().map(url => `"${url}"`)}]
-//                     ){
-//                     name
-//                     _id
-//                     }
-//                 }`
-//             )
-//             findNetworkEdit = rawMakeNetworkEdit.data.makeNetworkEdit
-//         }
-//         return findNetworkEdit
-//     }
-// }
+const saveNedit = async (nedit, thisTabUrl) => {
+    if (!emptyNedit(nedit)) {
+        const neditForSchema = modifyNeditForSchema(nedit)
+
+        const rawRes = await fetchGraphQL(
+            `query{
+                findNetworkEdit(
+                url: "${urlRoot(thisTabUrl)}",
+                filters: [${neditForSchema.filters}],
+                urls: [${neditForSchema.urls}],
+                storage: ${neditForSchema.storage}
+                ){
+                name
+                filters
+                urls
+                storage
+                uses
+                _id
+                }
+            }`
+        )
+        let findNetworkEdit = rawRes.data.findNetworkEdit
+
+        if (findNetworkEdit) {
+            await fetchGraphQL(
+                `mutation{
+                    incrementNetworkEditUses(
+                    id: "${findNetworkEdit._id}"
+                    ){
+                    name
+                    filters
+                    urls
+                    storage
+                    uses
+                    _id
+                    }
+                }`
+            )
+        } else if (!findNetworkEdit) {
+            const rawMakeNetworkEdit = await fetchGraphQL(
+                `mutation{
+                    makeNetworkEdit(
+                    name: "${neditForSchema.name}",
+                    url: "${urlRoot(thisTabUrl)}"
+                    storage: ${neditForSchema.storage},
+                    filters: [${neditForSchema.filters}],
+                    urls: [${neditForSchema.urls}]
+                    ){
+                    name
+                    filters
+                    urls
+                    storage
+                    uses
+                    _id
+                    }
+                }`
+            )
+            findNetworkEdit = rawMakeNetworkEdit.data.makeNetworkEdit
+        }
+
+        return findNetworkEdit
+    } else {
+        return false
+    }
+}
+
+const setName = async (newName, dataId) => {
+    const rawRes = await fetchGraphQL(
+        `mutation{
+            setNetworkEditName(
+              name: "${newName}",
+              id: "${dataId}"
+            ){
+              name
+              uses
+              _id
+            }
+        }`
+    )
+
+    chrome.storage.sync.get(['savedNedits'], (result) => {
+        const neditAlreadySaved = result.savedNedits.find(savedNedit => savedNedit.id === dataId)
+        if (neditAlreadySaved) {
+            neditAlreadySaved.name = newName
+        } else {
+            result.savedNedits.push({id: dataId, name: newName})
+        }
+        console.log('result: ', result)
+        chrome.storage.sync.set(result)
+    })
+
+    if (rawRes.data) {
+        const setNetworkEditName = rawRes.data.setNetworkEditName
+        return setNetworkEditName
+    } else {
+        return false
+    }
+}
+
+const setNeditFromData = async (nedit, thisTabUrl) => {
+    const rootUrl = urlRoot(thisTabUrl)
+
+    const neditForSchema = modifyNeditForSchema(nedit)
+    const rawRes = await fetchGraphQL(
+        `query{
+            findNetworkEdit(
+            url: "${rootUrl}",
+            filters: [${neditForSchema.filters}],
+            urls: [${neditForSchema.urls}],
+            storage: ${neditForSchema.storage}
+            ){
+            name
+            filters
+            urls
+            storage
+            uses
+            url
+            _id
+            }
+        }`
+    )
+    let findNetworkEdit = rawRes.data.findNetworkEdit
+
+    if (findNetworkEdit) {
+        chrome.storage.sync.get(['savedNedits'], (result) => {
+            const newNedit = responseDataToNedit(findNetworkEdit, result.savedNedits)
+            
+            const neditToSave = {}
+            neditToSave[rootUrl] = newNedit
+            chrome.storage.sync.set(neditToSave)
+            
+            chrome.runtime.sendMessage(
+                {to: rootUrl, msgType: 'neditUpdate', nedit: newNedit},
+            (ignoreThis) => {if (!window.chrome.runtime.lastError) {/*checks an error */}})
+            return newNedit
+        })
+    } else {
+        chrome.runtime.sendMessage(
+            {to: rootUrl, msgType: 'neditUpdate', nedit: {name: null, filters: [], urls: [], storage: false}},
+        (ignoreThis) => {if (!window.chrome.runtime.lastError) {/*checks an error */}})
+
+        return nedit
+    }
+    
+}
 
 const bestName = (names, dataId, savedNedits) => {
     const foundSavedNedit = savedNedits.find(savedNedit => savedNedit.id === dataId)
@@ -93,10 +185,28 @@ const bestName = (names, dataId, savedNedits) => {
 
 const modifyNeditForSchema = (nedit) => {
     const neditForSchema = {...nedit}
-    neditForSchema.name = neditForSchema.name.toLowerCase()
+    neditForSchema.name = neditForSchema.name ? neditForSchema.name.toLowerCase() : `(${neditForSchema.urls.length + neditForSchema.urls.length})${neditForSchema.storage ? 'c' : ''}`
     neditForSchema.urls = nedit.urls.length ? nedit.urls.sort().map(url => `"${url}"`) : ''
     neditForSchema.filters = nedit.filters.length ? nedit.filters.sort().map(filter => `"${filter}"`) : ''
     return neditForSchema
+}
+const responseDataToNedit = (responseData, savedNedits) => {
+    const newNedit = {}
+    
+    newNedit.name = bestName(responseData.name, responseData._id, savedNedits)
+    newNedit.filters = responseData.filters
+    newNedit.urls = responseData.urls
+    newNedit.storage = responseData.storage
+    
+    return newNedit
+}
+
+const setCurrentNeditName = (nedit, neditNameElement) => {
+    if (nedit.name) {
+        neditNameElement.innerText = nedit.name
+    } else {
+        neditNameElement.innerHTML = '<i>None</i>'
+    }
 }
 
 const urlRoot = (url) => {
@@ -231,17 +341,18 @@ const onEnterPress = (e, callback) => {
         }
     }
 }
-const inputSubmitUX = (submitElement, inputElement, callback) => {
+const inputSubmitUX = async (submitElement, inputElement, callback) => {
     const deactivate = () => {
         submitElement.style.opacity = '0.5'
         submitElement.style.cursor = 'auto'
         submitElement.setAttribute('disabled', 'true')
     }
-    const triggerCallback = () => {
+    const triggerCallback = async () => {
         if (submitElement.getAttribute('disabled')) {
             null
         } else {
-            if (callback(inputElement.value)) {
+            const response = await callback(inputElement.value)
+            if (response) {
                 inputElement.value = ''
                 deactivate()
             } else {
@@ -296,10 +407,15 @@ const emptyNedit = (nedit) => {
     }
 }
 
+const hideStateAlert = (container) => {
+    container.style.display = 'none'
+}
+
 const stateAlert = (state, container, title, content) => {
+    container.style.display = 'block'
+
     const tipsHTMLString = state.tips.map(tip => `<div>${tip}</div>`).join(' ')
     container.style = state.containerStyle
-    container.style.display = 'block'
     title.innerText = state.id
     content.innerHTML = tipsHTMLString
 }

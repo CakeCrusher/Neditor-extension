@@ -19,7 +19,19 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
     } else {
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
             const rootUrl = urlRoot(tabs[0].url)
-            chrome.runtime.sendMessage({to: rootUrl, msgType: 'neditUpdate', nedit: changes[rootUrl].newValue}, (ignoreThis) => {if (!window.chrome.runtime.lastError) {/*checks an error */}})
+            const newNedit = changes[rootUrl].newValue
+
+            if (newNedit.name && emptyNedit(newNedit)) {
+                newNedit.name = null
+
+                const neditToSet = {}
+                neditToSet[rootUrl] = newNedit
+                chrome.storage.sync.set(neditToSet)
+            }
+            
+            chrome.runtime.sendMessage(
+                {to: rootUrl, msgType: 'neditUpdate', nedit: newNedit},
+            (ignoreThis) => {if (!window.chrome.runtime.lastError) {/*checks an error */}})
         })
     }
     

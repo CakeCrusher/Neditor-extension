@@ -41,16 +41,44 @@ const neditStates = [
     }
 ]
 
+const prepareNotification = async (currentNedit, tabUrl, tabId) => {
+    if (emptyNedit(currentNedit) || !activated) {
+        const urlNetworkEdits = await fetchGraphQL(`
+            query{
+                urlNetworkEdits(
+                url: "${urlRoot(tabUrl)}"
+                ){
+                name
+                uses
+                _id
+                }
+            }
+        `)
+        const urlNedits = urlNetworkEdits.data.urlNetworkEdits
+        if (urlNedits.length) {
+            const stateToSet = neditStates.find(state => state.id === 'Nedits!')
+        
+            setState(stateToSet, tabId)
+        } else {
+            chrome.browserAction.setIcon({
+                path: './icons/icon16.png',
+                tabId: tabId
+            })
+        }
+    }
+
+}
+
 const setIcon = (tabId) => {
     const currentNedit = allNeditsById[tabId]
     const currentRequests = allRequestsById[tabId]
     const currentBlockedUrls = allBlockedUrlsById[tabId]
     const currentProgress = allProgressById[tabId]
 
-    if (emptyNedit(currentNedit)) {
-        const stateToSet = neditStates.find(state => state.id === 'Nedits!')
+    if (emptyNedit(currentNedit) || !activated) {
+        // const stateToSet = neditStates.find(state => state.id === 'Nedits!')
 
-        setState(stateToSet, tabId)
+        // setState(stateToSet, tabId)
     } else {
         const neditUrlsBlocked = []
         for (const url of currentNedit.urls) {

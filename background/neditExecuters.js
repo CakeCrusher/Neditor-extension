@@ -1,7 +1,8 @@
 const blockRequest = (nedit, request) => {
     const requestUrl = request.url
-
+    // console.log('emptyNedit(nedit): ', nedit)
     if (!emptyNedit(nedit)) {
+
         for (const filter of nedit.filters) {
             if (requestUrl.includes(filter)) {
                 chrome.runtime.sendMessage(
