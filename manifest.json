@@ -1,6 +1,6 @@
 {
     "manifest_version": 2,
-    "name": "Neditor (cleaned)",
+    "name": "Neditor",
     "description": "Network enhancer and tool augmented by the community to provide a better browsing experience.",
     "version": "1.0.0",
     "icons": {

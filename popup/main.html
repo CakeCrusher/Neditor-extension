@@ -28,7 +28,7 @@
             <h2 ><i>Turn on neditor to use</i></h2>
         </div>
         <div id="popup_content">
-            <div>
+            <div style="margin-bottom: 20px;">
                 <h2 style="font-weight: bold">Current nedit:</h2>
                 <div class="side_by_side">
                     <h2 id="current_edit" style="margin-right: 5px; font-weight: lighter;"><i>None</i></h2>
@@ -36,7 +36,6 @@
                 </div>
             </div>
             <!--  -->
-
             <h2 class="segment_title">Browse nedits</h2>
             <div id="edits_discovery_container">
                 <div id="discovery_options" class="side_by_side" style="padding: 0;">
@@ -44,16 +43,16 @@
                         <img id="edit_search_icon" class="search_icon " src="../icons/search.svg" /><input id="search-button" class="head_inputs" placeholder="Search nedits">
                     </div>
                     <div id="recommended-option" style=" border-bottom-left-radius: 3px;" class="discovery_option">
-                        <button id="recommended-button" class="primary-button button-m">recommended</button>
+                        <button id="recommended-button" class="primary-button button-m">Recommended</button>
                     </div>
                 </div>
                 <div id="search-info">
                     <h2 style="margin: 0px 10px;"><span id="query-title">All</span> nedits </h2>
-                    <div style="margin: 0px 10px; opacity: 0.5; z-index: 0; position: relative;">by most popular</div>
+                    <div style="margin: 0px 10px; opacity: 0.7; z-index: 0; position: relative;">by most popular</div>
                 </div>
                 <div style="display: none;" id="recommended-info">
                     <h2 style="margin: 0px 10px;">Recommended nedits</h2>
-                    <div style="margin: 0px 10px; opacity: 0.5;">determined by "Recommend if nedit deals with"<span id="search_list"></span></div>
+                    <div style="margin: 0px 10px; opacity: 0.7;">determined by "Recommend if nedit deals with"<span id="search_list"></span></div>
                 </div>
                 <ol id="edits_to_show">
                     
@@ -72,34 +71,54 @@
                 
                 </ul>
             </div> -->
-            <div>
-                <div class="side_by_side">
-                    <label for="automatic_blocking_input"><h2 class="segment_title" style="margin-bottom: 0;">Automatic blocking</h2></label>
-                    <input id="automatic_blocking_input" checked type="checkbox">
-                </div>
-                <div style="margin-bottom: 10px; opacity: 0.5;">immediately open a new tab with the nedit</div>
-                <div style="display: flex;" id="automatic_blocking_container" class="side_by_side">
-                    <div class="add_column-text" style="font-size: 16px; margin-right: 10px;">Select nedit by:</div>
-                    <select class="add_column-text" id="automatic_blocking_by">
-                        <option value="most popular">most popular</option>
-                        <option value="recommended">recommended</option>
-                    </select>
-                </div>
-            </div>
-            <div id="recommendation_container">
-                <h2 class="segment_title">Recommendations setup</h2>
-                <div style="margin-bottom: 10px;" class="side_by_side">
-                    <label for="recommendation_input" class="add_column-text" style="font-size: 16px;">Recommend if nedit deals with:</label>
-                    <input style="width: 90px" id="recommendation_input">
-                    <button id="recommend_submit" disabled="true" style="cursor: auto; opacity: 0.5;" class="primary-button button-m">submit</button>
-                </div>
-                <div style="display: none;" id="recommendation_words_wrapper">
-                    <div id="recommendation_words_container">
-
+            <div id="settings_wrapper">
+                <button style="margin-bottom: 3px;" id="settings_button" class="primary-button button-m">Settings</button>
+                <div style="display: none;" id="settings_container">
+                    <div>
+                        <div style="margin-top: 0;" class="side_by_side">
+                            <label for="automatic_blocking_input"><h2 class="segment_title" style="margin-bottom: 0;">Automatic blocking</h2></label>
+                            <input id="automatic_blocking_input" checked type="checkbox">
+                        </div>
+                        <div style="margin-bottom: 10px; opacity: 0.7;">immediately open a new tab with the nedit</div>
+                        <div style="display: flex;" id="automatic_blocking_container" class="side_by_side">
+                            <div class="add_column-text" style="font-size: 16px; margin-right: 10px;">Select nedit by:</div>
+                            <select class="add_column-text" id="automatic_blocking_by">
+                                <option value="most popular">most popular</option>
+                                <option value="recommended">recommended</option>
+                            </select>
+                        </div>
                     </div>
-                    <button id="clear_recommend_data" class="danger-button button-s">clear</button>
+                    <div id="recommendation_container">
+                        <h2 style="margin-bottom: 0;" class="segment_title">Recommendations setup</h2>
+                        <div style="margin-bottom: 10px; opacity: 0.7;">submit words to determine what is recommended</div>
+                        <!-- <div style="margin-bottom: 10px;" class="">
+                            <label for="recommendation_input" class="add_column-text" style="font-size: 16px;">Recommend if nedit deals with:</label>
+
+
+                        </div> -->
+                        <div style="margin-bottom: 10px;" class="side_by_side">
+                            <input id="recommendation_input" placeholder="Recommend if nedit contains '...'">
+                            <button id="recommend_submit" disabled="true" style="cursor: auto; opacity: 0.5;" class="primary-button button-m">submit</button>
+                        </div>
+                        <div style="display: none;" id="recommendation_words_wrapper">
+                            <div id="recommendation_words_container">
+
+                            </div>
+                            <button id="clear_recommend_data" class="danger-button button-s">clear</button>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div style="margin: 20px 0;" class="side_by_side">
+                <div>
+                    <h2 style="margin: 0; margin-right: 10px;" class="segment_title">Hard reload</h2>
+                    <div style="margin: 0; opacity: 0.7;">If you are having issues a hard reload (Ctrl + Shift + R) will likely solve them.</div>
+                </div>
+                <!-- <button id="hard_refresh_button" class="primary-button">Reload</button> -->
+            </div>
+
+            <h3 class="segment_title"><a href="https://www.youtube.com/playlist?list=PLvSmt4Ho5FFKxQ7Q6tkePJuUE_FM6EXuq">Video tutorials</a></h3>
+            
             <h3 class="segment_title">Begin nediting</h3>
             <ol style="padding-left: 20px;">
                 <li><strong>Inspect</strong> the page by: right clicking -> and clicking "inspect", (Ctrl+Shift+i)</li>

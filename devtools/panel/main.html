@@ -28,10 +28,17 @@
                 </div>
             </div>
             <div class="side_by_side" style="opacity: 0.7">
-                <label for="edit_name" style="font-size: 16px; margin-right: 10px; align-self: center;">Save nedit as:</label>
-                <input id="edit_name" placeholder="name this nedit" style="font-size: 14px; margin-right: 10px;" class="general-content" />
+                <input id="edit_name" placeholder="Name and save this nedit as" style="font-size: 14px; margin-right: 10px;" class="general-content" />
                 <button class="primary-button" id="save" disabled="true" style="cursor: auto; opacity: 0.5;">save</button>
             </div>
+            <div style="margin: 20px 0; margin-bottom: 10px;" class="side_by_side">
+                <div>
+                    <h2 style="margin: 0; margin-right: 10px;" class="segment_title">Hard reload</h2>
+                    <div style="margin: 0; opacity: 0.7;">Begin editing by hard reloading (Ctrl + Shift + R)</div>
+                </div>
+            </div>
+            <h3 class="segment_title"><a href="https://www.youtube.com/playlist?list=PLvSmt4Ho5FFKxQ7Q6tkePJuUE_FM6EXuq">Video tutorials</a></h3>
+
             <!-- <div style="opacity: 0.7; margin-top: 10px">
                 <button class="primary-button" id="show_saved_edits">show saved edits</button>
                 <ul id="saved_edits_container" style="display: none">
@@ -39,13 +46,16 @@
                 </ul>
             </div> -->
             <div class="side_by_side">
-                <label for="storage_checkbox"><h2 class="segment_title" style="margin-right: 5px;" id="storage_text">Clear site data</h2></label>
+                <label for="storage_checkbox">
+                    <h2 class="segment_title" style="margin-bottom: 0;margin-right: 5px;" id="storage_text">Clear site data</h2>
+                    <div style="margin: 0; opacity: 0.7;">Clears only the current site</div>
+                </label>
                 <input type="checkbox" id="storage_checkbox" />
             </div>
-            <h2 class="segment_title">Filter</h2>
+            <h2  style="margin-bottom: 0" class="segment_title">Filter</h2>
+            <div style="margin: 0; opacity: 0.7;">Blocks any urls that contain the filter's text.</div>
             <div class="side_by_side" id="description_container" style="margin-bottom: 10px;">
-                <label for="program_description"><div style="font-size: 16px; margin-right: 10px; align-self: center;">Block any url with the text: </div></label>
-                <input style="font-size: 14px; margin-right: 10px;" class="general-content" id="program_description">
+                <input style="font-size: 14px; margin-right: 10px; width: 200px;" placeholder="Block any urls that contain '...'" class="general-content" id="program_description">
                 <button style="cursor: auto; opacity: 0.5;" class="primary-button" id="submit_program" disabled="true" >add filter</button>
             </div>
             <table id="programs_table" cellspacing="0" cellpadding="5" style="margin-bottom: 20px;">
@@ -73,7 +83,7 @@
                         <button class="primary-button" id="add_column">add</button>
                     </div> -->
                     <div class="table_container side_by_side" style="padding-right: 0;">
-                        <table id="network_table" style="border-bottom-right-radius: 0; border-top-right-radius: 0;" cellspacing="0" cellpadding="5">
+                        <table id="network_table" style="border-bottom-right-radius: 0; border-top-right-radius: 0; padding-right: 100px;" cellspacing="0" cellpadding="5">
                             <tr id="table_head">
                                 
                             </tr>
@@ -82,7 +92,7 @@
                             </tbody>
                         </table>
                         <select style="font-size: 16px;" id="column_data">
-                            <option value="" style="opacity: 0.5;" disabled selected hidden>add</option>
+                            <option value="" style="opacity: 0.5;" disabled selected hidden>add column</option>
                             <option value="type">type</option>
                             <option value="priority">priority</option>
                             <option value="time">time</option>
@@ -91,14 +101,14 @@
                         </select>
                     </div>
                 </div>
-                <div id="blocked-content" style="display: none;" >
+                <div id="blocked-content" style="border: 2px solid rgb(170, 65, 65); background-color:  rgb(170, 65, 65); display: none;" class="table_container" >
                     <!-- <h2 style="color:  rgb(170, 65, 65)">Blocked requests (<span id="blocked_request_count">0</span>)</h2> -->
                     <table id="blocked_table" cellspacing="0" cellpadding="5">
                         <tr>
                             <!-- <th><button id="blocked-block_button" class="toblock">block</button></th> -->
-                            <th style="border-left-width: 0;">blocked by</th>
+                            <th style="border-left-width: 0;"><h3 style="color: white; margin: 5px 0;">blocked by</h3></th>
                             <!-- <th><img class="search_icon" src="../../icons/search.svg" /><input id="blocked_url-input" class="head_inputs" placeholder="url " style="width: 47px"/></th> -->
-                            <th>blocked urls</th>
+                            <th><h3 style="color: white; margin: 5px 0;">blocked urls</h3></th>
                         </tr>
                         <tbody id="blocked_table_data">
 

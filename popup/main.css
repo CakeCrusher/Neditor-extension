@@ -99,7 +99,7 @@ h2 {
     padding-left: 20px;
     color: black;
     font-size: 14px;
-    font-weight: bold;
+    /* font-weight: bold; */
     border-radius: 3px;
     border:  black 2px solid;
 }
@@ -107,6 +107,7 @@ h2 {
     width: fit-content;
 }
 #recommendation_input {
+    width: 220px;
     margin-right: 10px;
 }
 .danger-button {
@@ -138,7 +139,7 @@ h2 {
     border: 2px solid black;
     border-radius: 3px;
     padding: 5px;
-    width: 385px;
+    /* width: 385px; */
     overflow: hidden;
 }
 #recommendation_words_container {
@@ -181,4 +182,17 @@ h2 {
     border-radius: 3px;
     height: 17px;
     overflow-y: scroll;
+}
+#settings_container {
+    display: none;
+    padding: 8px 5px;
+    background-color: white;
+    border-radius: 3px;
+    overflow: hidden;
+}
+#settings_wrapper {
+    margin-top: 20px;
+    background-color:  rgb(30,30,30);
+    padding: 3px;
+    border-radius: 3px;
 }

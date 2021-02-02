@@ -59,6 +59,7 @@ const makeCellContent = (type, request, tableId) => {
         checkbox.type = 'checkbox'
         checkbox.className = 'blockCheckbox'
         checkbox.id = `blockCheckbox-${tableId}-${uniqueId}`
+        // console.log(checkbox.id);
         if (tableId === 'ANR') {
             checkbox.checked = nedit.urls.includes(uniqueId)
             checkbox.onclick = () => onBlockCheckboxClick(checkbox, request)
@@ -112,7 +113,7 @@ const filterTable = () => {
     Object.keys(filters).forEach(filterKey => {
         const passedRequests = []
         requestsToShow.forEach(r => {
-            if (requestNavigator(filterKey, r).includes(filters[filterKey])) {
+            if (requestNavigator(filterKey, r).toString().includes(filters[filterKey])) {
                 passedRequests.push(r)
             }
         })
@@ -124,7 +125,7 @@ const filterTable = () => {
 const requestFilter = (request) => {
     let failed = false
     Object.keys(filters).forEach(filterKey => {
-        if (!requestNavigator(filterKey, request).includes(filters[filterKey])) {
+        if (!requestNavigator(filterKey, request).toString().includes(filters[filterKey])) {
             failed = true
         }
     })
@@ -149,11 +150,15 @@ const addColumn = (columnType = columnAggregator.value) => {
 
 const onBlockToggle = (button) => {
     filterTable()
+    console.log(requestsToShow);
     const urlsOfRequestsInTable = requestsToShow.map(r => r.request.url)
     const buttonsOfRequestsInTable = []
     for (const url of urlsOfRequestsInTable) {
+        // console.log(`blockCheckbox-ANR-${url}`);
         const foundElement = document.getElementById(`blockCheckbox-ANR-${url}`)
-        buttonsOfRequestsInTable.push(foundElement)
+        if (foundElement) {
+            buttonsOfRequestsInTable.push(foundElement)
+        }
     }
     if (button.getAttribute('block')) {
         for (const blockButton of buttonsOfRequestsInTable) {
@@ -181,10 +186,15 @@ const onBlockToggle = (button) => {
 
 const makeBlockAllButton = () => {
     const headContent = document.createElement('th')
+    headContent.style.minWidth = '110px'
     headContent.style.borderLeftWidth = '0'
+    const title = document.createElement('h3')
+    title.style = 'color: white; margin: 5px 0;'
+    title.innerText = 'Block on reload'
+    headContent.appendChild(title)
     const button = document.createElement('button')
     button.id = 'network-block_button'
-    button.innerText = 'block'
+    button.innerText = 'Block all'
     button.setAttribute('block', 'true')
     button.onclick = () => onBlockToggle(button)
     headContent.appendChild(button)
@@ -200,15 +210,20 @@ const activateColumn = (columnType,) => {
         headContent = makeBlockAllButton()
     } else {
         headContent = document.createElement('th')
+        const title = document.createElement('h3')
+        title.style = 'color: white; margin: 5px 0;'
+        title.innerText = columnType
+        headContent.appendChild(title)
         const searchIcon = document.createElement('img')
         searchIcon.className = 'search_icon'
         searchIcon.src = '../../icons/search.svg'
         headContent.appendChild(searchIcon)
         const columnFilterInput = document.createElement('input')
+        
         columnFilterInput.id = `${columnType}-input`
         columnFilterInput.className = 'head_inputs'
-        columnFilterInput.placeholder = columnType
-        columnFilterInput.style.width = `${((columnType.length + 1) * 8) + 20}px`
+        columnFilterInput.placeholder = 'Filter'
+        columnFilterInput.style.width = `${(('Filter'.length + 1) * 8) + 20}px`
         columnFilterInput.addEventListener('input', () => {
             filters[columnType] = columnFilterInput.value
             filterTable()

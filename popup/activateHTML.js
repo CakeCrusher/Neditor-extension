@@ -84,7 +84,7 @@ const automaticNeditSelector = document.getElementById('automatic_blocking_by')
 const setAutomaticNedit = (setTo) => {
     console.log(setTo);
     if (setTo) {
-        automaticNeditSubContainer.style.display = 'block'
+        automaticNeditSubContainer.style.display = 'flex'
         automaticNeditSelector.value = setTo
         automaticNeditCheckbox.checked = true
     } else {
@@ -147,7 +147,7 @@ const filteredBySeach = (neditsData) => {
     for (const neditData of neditsData) {
         for (const neditDataName of neditData.name) {
             if (
-                neditDataName.includes(neditSearchInput.value) &&
+                neditDataName.includes(neditSearchInput.value.toLowerCase()) &&
                 !filteredNeditsToShow.find(filteredNeditData => filteredNeditData._id === neditData._id)
             ) {
                 filteredNeditsToShow.push(neditData)
@@ -215,6 +215,17 @@ neditSearchInput.addEventListener('input', () => {
     }
 })
 
+const settingsButton = document.getElementById('settings_button')
+const settingsContainer = document.getElementById('settings_container')
+const onSettingsToggle = () => {
+    console.log(settingsContainer.style.display);
+    if (settingsContainer.style.display == 'none') {
+        settingsContainer.style.display = 'block'
+    } else {
+        settingsContainer.style.display = 'none'
+    }
+}
+settingsButton.onclick = onSettingsToggle
 
 const initiateAfterDataPackage = (msg) => {
     neditorActiveCheckbox.checked = msg.activated

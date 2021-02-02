@@ -34,7 +34,7 @@ th {
     right: 0;
     color: white;
     cursor: pointer;
-    width: 56px;
+    width: 110px;
     background-color:  white;
     color:rgb(30, 30, 30);
     text-decoration: underline;
@@ -74,11 +74,14 @@ td::-webkit-scrollbar {
     display: none;
 }
 .table_container {
-    max-width: 700;
-    max-height: 250px;
+    /* max-width: 700; */
+    /* width: 500px; */
+    max-height: 350px;
+    /* height: 500px; */
     border-radius: 3px;
     border: 2px solid rgb(30, 30, 30);
-    width: fit-content;
+    background-color:  rgb(30, 30, 30);
+    /* border: 2px solid red; */
     overflow: scroll;
 }
 /* #//network_table, td {
@@ -193,6 +196,7 @@ td::-webkit-scrollbar {
     text-decoration: none;
 }
 #table_options-container {
+    height: 400px;
     background-color: black;
     border-radius: 3px;
     padding: 10px;
