@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Neditor",
     "description": "Network enhancer and tool augmented by the community to provide a better browsing experience.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "icons": {
         "16": "icons/icon16.png",
         "24": "icons/icon24.png",
@@ -30,6 +30,7 @@
             "background/automaticNeditHandler.js",
             "background/onUpdated.js",
             "background/messanger.js",
+            "background/storageAdministration.js",
             "background/main.js"
         ],
         "persistent": true
