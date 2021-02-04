@@ -23,17 +23,28 @@ const blockRequest = (nedit, request) => {
 }
 
 const clearStorage = (nedit, tabUrl) => {
+
     if (nedit.storage && activated) {
-        chrome.browsingData.remove({
-            "origins": [tabUrl]
-        }, {
-            "cacheStorage": true,
-            "cookies": true,
-            "fileSystems": true,
-            "indexedDB": true,
-            "localStorage": true,
-            "serviceWorkers": true,
-            "webSQL": true,
-        }, () => console.log('cleared storage'))
+        if (getBrowser() === 'Firefox') {
+            // browser.browsingData.remove({}, {
+            //     "cookies": true,
+            //     "indexedDB": true,
+            //     "localStorage": true,
+            //     "serviceWorkers": true,
+            // }, () => console.log('cleared storage'))
+        } else {
+            chrome.browsingData.remove({
+                "origins": [tabUrl]
+            }, {
+                "cacheStorage": true,
+                "cookies": true,
+                "fileSystems": true,
+                "indexedDB": true,
+                "localStorage": true,
+                "serviceWorkers": true,
+                "webSQL": true,
+            }, () => console.log('cleared storage'))
+        }
+
     }    
 }
