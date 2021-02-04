@@ -15,7 +15,7 @@ Neditor is mainly composed from 3 components and utils (along with the GraphQL N
 Contains 8 files that embody the aspects of the background.
 
 - **Nedit execution**: orchestrates how the nedit is executed ([neditExecuters.js](background/neditExecuters.js)).
-- **Message handler**: ties all of the components together through [message passing](https://developer.chrome.com/docs/extensions/mv2/messaging/) ([messanger.js](background/messanger.js)).
+- **Message handler**: ties all of the components together through message passing ([messanger.js](background/messanger.js)).
 - **Storage administration**: administrator for the storage so that all of the storage changes are handled here ([storageAdministration.js](background/storageAdministration.js)).
 - **Automatic nedit**: if the user has automatic nedit set, it is handled here ([automaticNeditHandler.js](background/automaticNeditHandler.js)).
 - **Final script**: sets up the rest of background ([main.js](background/main.js)).
