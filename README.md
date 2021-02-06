@@ -1,5 +1,6 @@
 # Neditor
-<img src="https://i.imgur.com/Zwnm8vE.png">
+<a href="https://sites.google.com/view/neditor/home"><img src="https://i.imgur.com/Zwnm8vE.png"></a>
+
 Neditor is a network editing tool built for anyone who seeks a better browsing experience. Users create custom instructions (nedits) for how the network requests ought to be handled when a page is being loaded. The nedits are then uploaded to the database once used or saved so that any other user may use it.
 
 # Primary components
