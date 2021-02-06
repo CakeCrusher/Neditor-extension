@@ -32,17 +32,15 @@ chrome.tabs.onUpdated.addListener((_tabId, info, tabInfo) => {
                 if (!emptyNedit(result[urlRoot(tabLoadingUrl)])) {
                     allNeditsById[tabInfo.id] = result[urlRoot(tabLoadingUrl)]
                     clearStorage(allNeditsById[tabInfo.id], tabLoadingUrl)
-                    setIcon(tabInfo.id)
                 } else {
                     allNeditsById[tabInfo.id] = {name: null, filters: [], urls: [], storage: false}
-                    prepareNotification(allNeditsById[tabInfo.id], tabLoadingUrl, tabInfo.id)
                     // insert automatic blocking condition and actions here
                 }
-                console.log('tabInfo.id: ', tabInfo.id)
                 allBlockedUrlsById[tabInfo.id] = []
                 allRequestsById[tabInfo.id] = []
-                // prepareNotification(allNeditsById[tabInfo.id], tabLoadingUrl, tabInfo.id)
-                // setIcon(tabInfo.id)
+                prepareNotification(allNeditsById[tabInfo.id], tabLoadingUrl, tabInfo.id)
+                setIcon(tabInfo.id)
+                console.log(allNeditsById[tabInfo.id]);
                 saveNedit(allNeditsById[tabInfo.id], tabLoadingUrl)
             })
         })

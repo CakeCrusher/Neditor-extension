@@ -35,6 +35,15 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
             const rootUrl = urlRoot(tabs[0].url)
             const newNedit = changes[rootUrl].newValue
+            if (changes[rootUrl].newValue.name === changes[rootUrl].oldValue.name) {
+                console.log(allNeditsById[tabs[0].id]);
+                allNeditsById[tabs[0].id].name = null
+                console.log(allNeditsById[tabs[0].id]);
+                newNedit.name = null
+                const neditToSet = {}
+                neditToSet[rootUrl] = newNedit
+                chrome.storage.sync.set(neditToSet)
+            }
 
             if (newNedit.name && emptyNedit(newNedit)) {
                 newNedit.name = null
