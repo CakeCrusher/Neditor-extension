@@ -3,6 +3,8 @@
 
 Neditor is a network editing tool built for anyone who seeks a better browsing experience. Users create custom instructions (nedits) for how the network requests ought to be handled when a page is being loaded. The nedits are then uploaded to the database once used or saved so that any other user may use it.
 
+### [Video](https://www.youtube.com/watch?v=Y7w6gSOTnR4)
+
 # Download
 <a href="https://chrome.google.com/webstore/detail/neditor/decdgljidgldegkhmbiaphkmjadhclkg">Chrome</a>
 
@@ -10,6 +12,8 @@ Neditor is a network editing tool built for anyone who seeks a better browsing e
 
 # Primary components
 Neditor is mainly composed from 3 components and utils (along with the GraphQL Node.js Server):
+
+
 
 - **[background](background)**: serves (more than it is already meant to be) as the base of the application within which most of the non UI related functions are handled.
 - **[popup](popup)**: displays important information about the current nedit as well as offering a convenient way for a user to browse and select a nedit to use. Additionally the popup also gives the user access to the settings so that the user may customize the way Neditor behaves.
